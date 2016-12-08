@@ -7,6 +7,10 @@ var app = express();
 require('./configure')(app, db);
 app.use(require('./routes'));
 
+app.get('/*', function (req, res) {
+	res.sendFile(app.get('indexHTMLPath'));
+});
+
 var port = process.env.PORT || 1337;
 var server = app.listen(port, function(){
 	console.log("listening on port", port);
