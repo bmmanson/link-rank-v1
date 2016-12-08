@@ -11,7 +11,19 @@ var Post = db.define('post', {
 		allowNull: false
 	},
 	description: {
-		type: Sequelize.STRING
+		type: Sequelize.STRING,
+		defaultValue: ""
+	},
+	score: {
+		type: Sequelize.INTEGER,
+		defaultValue: 0
+	},
+	numberOfComments: {
+		type: Sequelize.INTEGER,
+		defaultValue: 0
+	},
+	rank: {
+		type: Sequelize.INTEGER
 	}
 })
 

@@ -4,7 +4,7 @@ var express = require('express');
 var db = require('./models');
 var app = express();
 
-//require('./configure')(app, db);
+require('./configure')(app, db);
 app.use(require('./routes'));
 
 var port = process.env.PORT || 1337;

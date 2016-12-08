@@ -1,7 +1,5 @@
 var Promise = require('bluebird');
 var db = require('./models');
-// var Message = require('./models/message');
-// var User = require('./models/user');
 
 var data = {
 	user: [
