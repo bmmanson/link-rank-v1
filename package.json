@@ -1,0 +1,17 @@
+{
+  "name": "linkrankv1",
+  "version": "1.0.0",
+  "description": "A Hacker News clone",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ben Manson",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "pg": "^6.1.0",
+    "react": "^15.4.1",
+    "sequelize": "^3.27.0"
+  }
+}
