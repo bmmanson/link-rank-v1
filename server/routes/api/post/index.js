@@ -18,4 +18,15 @@ router.get('/', function (req, res, next) {
 	}).catch(next);
 });
 
+router.post('/new', function (req, res, next) {
+	Post.create({
+		title: req.body.title,
+		url: req.body.url,
+		description: req.body.description,
+		userId: req.body.userId
+	}).then(function (post) {
+		res.json(post);
+	}).catch(next);
+});
+
 module.exports = router;
