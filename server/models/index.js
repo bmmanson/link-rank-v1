@@ -15,6 +15,7 @@ Comment.belongsTo(User, {as: "author", foreignKey: "authorId"});
 Post.hasMany(Comment, {as: "comment", foreignKey: "postId"});
 Comment.belongsTo(Post, {as: "comment", foreignKey: "postId"});
 //still need rows in this table to refer to themselves
+//will make it possible to comment on comments and to represent it as a tree
 
 //points of links table -- link to user and post table
 User.belongsToMany(Post, {as: "user", through: 'postpoint', foreignKey: 'userId'});

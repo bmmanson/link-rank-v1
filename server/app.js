@@ -5,7 +5,7 @@ var db = require('./models');
 var app = express();
 
 //require('./configure')(app, db);
-//app.use(require('./routes'));
+app.use(require('./routes'));
 
 var port = process.env.PORT || 1337;
 var server = app.listen(port, function(){

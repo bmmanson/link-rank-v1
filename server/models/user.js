@@ -8,10 +8,12 @@ var User = db.define('user', {
 	},
 	facebookId: {
 		type: Sequelize.STRING,
-		allowNull: false
+		allowNull: false,
+		unique: true
 	},
 	score: {
-		type: Sequelize.INTEGER
+		type: Sequelize.INTEGER,
+		defaultValue: 0
 	}
 })
 
