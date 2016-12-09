@@ -3,7 +3,8 @@ export const NavbarStyles = {
 		backgroundColor: '#1E90FF', 
 		display: 'flex',  
 		flex: 1,
-		overflow: 'hidden'
+		overflow: 'hidden',
+		marginBottom: 0
 	},
 	half: {
 		flex: .5

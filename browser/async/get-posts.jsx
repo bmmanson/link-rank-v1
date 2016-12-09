@@ -23,7 +23,8 @@ export const getPosts = () => {
 					post.score,
 					post.numberOfComments,
 					post.user.name,
-					post.rank
+					post.rank,
+					post.createdAt
 				)
 			)
 		})

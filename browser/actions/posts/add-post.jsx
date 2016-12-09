@@ -1,4 +1,4 @@
-export const addPost = (title, url, score, comments, author, rank) => {
+export const addPost = (title, url, score, comments, author, rank, date) => {
 	return {
 		type: 'ADD_POST',
 		title,
@@ -6,6 +6,7 @@ export const addPost = (title, url, score, comments, author, rank) => {
 		score,
 		comments,
 		author,
-		rank
+		rank,
+		date
 	}
 };

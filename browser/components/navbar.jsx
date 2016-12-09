@@ -8,7 +8,7 @@ class Navbar extends Component {
 			<div style={NavbarStyles.container}>
 				<div style={NavbarStyles.half}>
 					<h5 style={NavbarStyles.leftText}>
-							Link Rank || Main || Post || About
+							Link Rank | Main | Newest | About | Submit
 					</h5>
 				</div>
 				<div style={NavbarStyles.half}>

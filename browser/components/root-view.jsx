@@ -18,7 +18,7 @@ class Root extends Component {
 
 	render () {
 		return (
-			<div style={{backgroundColor:'#EBEBEB'}}>
+			<div>
 				<div style={{marginLeft: 70, marginRight: 70}}>
 					<Navbar />
 					<Links links={this.props.links} />
