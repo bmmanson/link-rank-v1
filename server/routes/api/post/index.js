@@ -5,6 +5,7 @@ var User = require('./../../../models/user');
 var router = express.Router();
 
 router.get('/', function (req, res, next) {
+	console.log("posts root route");
 	Post.findAll({
 		include:[
 			{
