@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
+
+import { submitPost } from './../async/index.jsx';
 
 import { SubmitFormStyles } from './../styles/submit-form.jsx';
 
@@ -15,8 +18,6 @@ class SubmitForms extends Component {
 		};
 	}
 
-//errors 
-
 	render () {
 
 		const errorSendingMessage = (error) => {
@@ -31,13 +32,25 @@ class SubmitForms extends Component {
 			}
 		}
 
-		const submitLink = () => {
+		const submit = () => {
 
-			if (this.state.url.length === 0 || this.state.title.length === 0) {
+			if (this.state.url.length === 0 || this.state.title.length < 8) {
 				return this.setState({error: true});
 			} else {
-				//send to 
-				//redirect to main
+				const post = {
+					url: this.state.url,
+					title: this.state.title,
+					text: this.state.text,
+					userId: 1
+				};
+				return submitPost(post)
+				.then((valid) => {
+					if (!valid) {
+						this.setState({error: true});
+					} else {
+						browserHistory.push('/');
+					}
+				})
 			}
 		}
 
@@ -49,7 +62,9 @@ class SubmitForms extends Component {
 						<p style={{textAlign: 'left', margin: 0, marginLeft: 2}}>title:</p>
 					</div>
 					<div>
-						<input style={{width: 300}}/>
+						<input style={{width: 300}}
+								value={this.state.title}
+								onChange={(event) => this.setState({title: event.target.value})}/>
 					</div>
 				</div>
 				<div style={{height: 20, marginTop: 4}}>
@@ -57,7 +72,9 @@ class SubmitForms extends Component {
 						<p style={{textAlign: 'left', margin: 0, marginLeft: 2}}>url:</p>
 					</div>
 					<div>
-						<input style={{width: 300}}/>
+						<input style={{width: 300}}
+								value={this.state.url}
+								onChange={(event) => this.setState({url: event.target.value})}/>
 					</div>
 				</div>
 				<div style={{marginTop: 20}}>
@@ -65,7 +82,9 @@ class SubmitForms extends Component {
 						<p style={{textAlign: 'left', margin: 0, marginLeft: 2}}>text:</p>
 					</div>
 					<div>
-						<textarea style={{width: 360, height: 80}}/>
+						<textarea style={{width: 360, height: 80}}
+								value={this.state.text}
+								onChange={(event) => this.setState({text: event.target.value})}/>
 					</div>
 				</div>
 				<div>
@@ -73,7 +92,7 @@ class SubmitForms extends Component {
 						<p> </p>
 					</div>
 					<div>
-						<button onClick={submitLink}>submit</button>
+						<button onClick={submit}>submit</button>
 					</div>
 				</div>
 				<div>

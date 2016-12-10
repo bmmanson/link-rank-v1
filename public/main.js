@@ -23453,13 +23453,16 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.getPosts = exports.rootUrl = undefined;
+	exports.submitPost = exports.getPosts = exports.rootUrl = undefined;
 
 	var _getPosts = __webpack_require__(214);
+
+	var _submitPost = __webpack_require__(387);
 
 	var rootUrl = exports.rootUrl = 'http://localhost:1337/';
 
 	exports.getPosts = _getPosts.getPosts;
+	exports.submitPost = _submitPost.submitPost;
 
 /***/ },
 /* 214 */
@@ -23489,7 +23492,6 @@
 			return data.json();
 		}).then(function (posts) {
 			posts.forEach(function (post) {
-				console.log("POST", post);
 				_store.store.dispatch((0, _index.addPost)(post.title, post.url, post.score, post.numberOfComments, post.user.name, post.rank, post.createdAt));
 			});
 		});
@@ -43540,9 +43542,7 @@
 	}(_react.Component);
 
 	var mapStateToProps = function mapStateToProps(state) {
-		return {
-			//posts: state.posts,
-		};
+		return {};
 	};
 
 	var SubmitView = (0, _reactRedux.connect)()(Submit);
@@ -43567,6 +43567,10 @@
 	var _react2 = _interopRequireDefault(_react);
 
 	var _reactRedux = __webpack_require__(204);
+
+	var _reactRouter = __webpack_require__(328);
+
+	var _index = __webpack_require__(213);
 
 	var _submitForm = __webpack_require__(386);
 
@@ -43595,8 +43599,6 @@
 			return _this;
 		}
 
-		//errors 
-
 		_createClass(SubmitForms, [{
 			key: 'render',
 			value: function render() {
@@ -43618,13 +43620,24 @@
 					}
 				};
 
-				var submitLink = function submitLink() {
+				var submit = function submit() {
 
-					if (_this2.state.url.length === 0 || _this2.state.title.length === 0) {
+					if (_this2.state.url.length === 0 || _this2.state.title.length < 8) {
 						return _this2.setState({ error: true });
 					} else {
-						//send to 
-						//redirect to main
+						var post = {
+							url: _this2.state.url,
+							title: _this2.state.title,
+							text: _this2.state.text,
+							userId: 1
+						};
+						return (0, _index.submitPost)(post).then(function (valid) {
+							if (!valid) {
+								_this2.setState({ error: true });
+							} else {
+								_reactRouter.browserHistory.push('/');
+							}
+						});
 					}
 				};
 
@@ -43647,7 +43660,11 @@
 						_react2.default.createElement(
 							'div',
 							null,
-							_react2.default.createElement('input', { style: { width: 300 } })
+							_react2.default.createElement('input', { style: { width: 300 },
+								value: this.state.title,
+								onChange: function onChange(event) {
+									return _this2.setState({ title: event.target.value });
+								} })
 						)
 					),
 					_react2.default.createElement(
@@ -43665,7 +43682,11 @@
 						_react2.default.createElement(
 							'div',
 							null,
-							_react2.default.createElement('input', { style: { width: 300 } })
+							_react2.default.createElement('input', { style: { width: 300 },
+								value: this.state.url,
+								onChange: function onChange(event) {
+									return _this2.setState({ url: event.target.value });
+								} })
 						)
 					),
 					_react2.default.createElement(
@@ -43683,7 +43704,11 @@
 						_react2.default.createElement(
 							'div',
 							null,
-							_react2.default.createElement('textarea', { style: { width: 360, height: 80 } })
+							_react2.default.createElement('textarea', { style: { width: 360, height: 80 },
+								value: this.state.text,
+								onChange: function onChange(event) {
+									return _this2.setState({ text: event.target.value });
+								} })
 						)
 					),
 					_react2.default.createElement(
@@ -43703,7 +43728,7 @@
 							null,
 							_react2.default.createElement(
 								'button',
-								{ onClick: submitLink },
+								{ onClick: submit },
 								'submit'
 							)
 						)
@@ -43766,6 +43791,45 @@
 			float: 'left',
 			width: 40
 		}
+	};
+
+/***/ },
+/* 387 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.submitPost = undefined;
+
+	var _index = __webpack_require__(213);
+
+	var httpRequest = function httpRequest(post) {
+		var url = _index.rootUrl + 'api/post/new';
+		var data = JSON.stringify(post);
+		var request = {
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			method: "POST",
+			body: data
+		};
+		return fetch(url, request);
+	};
+
+	var submitPost = exports.submitPost = function submitPost(post) {
+		//validate that the submitted url is a valid url
+		return httpRequest(post).then(function (data) {
+			return data.json();
+		}).then(function (post) {
+			if (post) {
+				return true;
+			} else {
+				return false;
+			}
+		});
 	};
 
 /***/ }

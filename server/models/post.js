@@ -10,7 +10,7 @@ var Post = db.define('post', {
 		type: Sequelize.STRING,
 		allowNull: false
 	},
-	description: {
+	text: {
 		type: Sequelize.STRING,
 		defaultValue: ""
 	},

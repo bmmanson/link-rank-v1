@@ -21,26 +21,32 @@ var data = {
 		{
 			title: "The New York Times",
 			url: "http://nytimes.com",
-			description: "a place to read the news",
+			text: "a place to read the news",
 			userId: 1
 		},
 		{
 			title: "Wikipedia",
 			url: "http://www.wikipedia.org",
-			description: "a helpful resource for information",
+			text: "a helpful resource for information",
 			userId: 2
 		},
 		{
 			title: "Google",
 			url: "http://www.google.com",
-			description: "a website for finding websites",
+			text: "a website for finding websites",
 			userId: 1
 		},
 		{
 			title: "Allmusic",
 			url: "http://www.allmusic.com",
-			description: "read about music here",
+			text: "read about music here",
 			userId: 3
+		},
+		{
+			title: "Vox",
+			url: "http://www.vox.com",
+			text: "a website for explanatory journalism",
+			userId: 2
 		}
 	]
 }

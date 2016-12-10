@@ -15,7 +15,6 @@ export const getPosts = () => {
 	.then((data) => data.json())
 	.then((posts) => {
 		posts.forEach((post) => {
-			console.log("POST", post);
 			store.dispatch(
 				addPost(
 					post.title,

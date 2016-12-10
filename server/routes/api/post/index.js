@@ -5,7 +5,6 @@ var User = require('./../../../models/user');
 var router = express.Router();
 
 router.get('/', function (req, res, next) {
-	console.log("posts root route");
 	Post.findAll({
 		include:[
 			{
@@ -23,7 +22,7 @@ router.post('/new', function (req, res, next) {
 	Post.create({
 		title: req.body.title,
 		url: req.body.url,
-		description: req.body.description,
+		text: req.body.text,
 		userId: req.body.userId
 	}).then(function (post) {
 		res.json(post);

@@ -20,12 +20,12 @@ class Submit extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		//posts: state.posts,
+		
 	};
 }
 
 const SubmitView = connect(
-	//mapStateToProps
+	
 )(Submit);
 
 export { SubmitView };
