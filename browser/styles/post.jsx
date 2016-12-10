@@ -1,4 +1,4 @@
-export const LinkStyles = {
+export const PostStyles = {
 	container: {
 		fontFamily: 'Oxygen', 
 		marginTop: 0, 

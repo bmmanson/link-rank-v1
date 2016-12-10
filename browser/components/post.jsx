@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 let moment = require('moment');
 
-import {LinkStyles} from './../styles/link.jsx';
-//need rank and vote up button
+import {PostStyles} from './../styles/post.jsx';
 
-class Link extends Component {
+class Post extends Component {
 	
 	constructor(props) {
 		super(props);
@@ -87,15 +86,15 @@ class Link extends Component {
 				<div style={{float: 'left', width: 10}}>
 					<h3 style={{fontFamily: 'Oxygen', fontSize: 10, marginTop: 5, marginLeft: 2, textAlign: 'center'}}>▲</h3>
 				</div>
-				<div style={LinkStyles.container}>
-						<h5 style={LinkStyles.linkText}>
-							<a href={this.props.link.url} 
-								style={LinkStyles.linkText}>
-								{this.props.link.title}
+				<div style={PostStyles.container}>
+						<h5 style={PostStyles.linkText}>
+							<a href={this.props.post.url} 
+								style={PostStyles.linkText}>
+								{this.props.post.title}
 							</a>
 						</h5>
-						<h6 style={LinkStyles.otherText}>
-							{formattedScore(this.props.link.score)} by <a href={'/'} onMouseEnter={toggleUser} onMouseLeave={toggleUser} style={userStyle}>{this.props.link.author}</a> {formattedTime(this.props.link.date)} | <span style={hideStyle} onMouseEnter={toggleHide} onMouseLeave={toggleHide}>hide</span> | <a href={'/'} onMouseEnter={toggleComment} onMouseLeave={toggleComment} style={commentsStyle}>{displayComments(this.props.link.comments)}</a>
+						<h6 style={PostStyles.otherText}>
+							{formattedScore(this.props.post.score)} by <a href={'/'} onMouseEnter={toggleUser} onMouseLeave={toggleUser} style={userStyle}>{this.props.post.author}</a> {formattedTime(this.props.post.date)} | <span style={hideStyle} onMouseEnter={toggleHide} onMouseLeave={toggleHide}>hide</span> | <a href={'/'} onMouseEnter={toggleComment} onMouseLeave={toggleComment} style={commentsStyle}>{displayComments(this.props.post.comments)}</a>
 						</h6>
 				</div>
 			</div>
@@ -103,4 +102,4 @@ class Link extends Component {
 	}
 }
 
-export { Link };
+export { Post };
