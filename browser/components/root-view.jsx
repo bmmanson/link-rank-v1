@@ -13,12 +13,15 @@ class Root extends Component {
 		getPosts();
 	}
 
+	//only show the first 30 links
+	//include More button to download the next 30 links
+
 	render () {
 		return (
 			<div>
 				<div style={{marginLeft: 70, marginRight: 70}}>
 					<Navbar selected={'MAIN'} />
-					<Posts posts={this.props.posts} />
+					<Posts posts={this.props.posts} type={'MAIN'} />
 				</div>
 			</div>
 		);

@@ -4,6 +4,7 @@ export const posts = (state = [], action) => {
       return [
         ...state,
         {
+          id: action.id,
           title: action.title,
           url: action.url,
           score: action.score,

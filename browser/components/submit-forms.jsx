@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 
+const validUrl = require('valid-url');
+
 import { submitPost } from './../async/index.jsx';
 
 import { SubmitFormStyles } from './../styles/submit-form.jsx';
@@ -33,8 +35,9 @@ class SubmitForms extends Component {
 		}
 
 		const submit = () => {
-
-			if (this.state.url.length === 0 || this.state.title.length < 8) {
+			if (this.state.url.length === 0 || this.state.title.length < 5) {
+				return this.setState({error: true});
+			} else if (validUrl.isUri(this.state.url) === undefined) {
 				return this.setState({error: true});
 			} else {
 				const post = {

@@ -21492,6 +21492,8 @@
 
 	var _submitView = __webpack_require__(384);
 
+	var _discussView = __webpack_require__(389);
+
 	var _store = __webpack_require__(182);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -21521,7 +21523,8 @@
 						_reactRouter.Router,
 						{ history: _reactRouter.browserHistory },
 						_react2.default.createElement(_reactRouter.Route, { path: '/', component: _rootView.RootView }),
-						_react2.default.createElement(_reactRouter.Route, { path: 'submit', component: _submitView.SubmitView })
+						_react2.default.createElement(_reactRouter.Route, { path: 'submit', component: _submitView.SubmitView }),
+						_react2.default.createElement(_reactRouter.Route, { path: '/item/:itemId', component: _discussView.DiscussView })
 					)
 				);
 			}
@@ -21549,6 +21552,8 @@
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(328);
 
 	var _navbar = __webpack_require__(181);
 
@@ -21581,7 +21586,18 @@
 						_react2.default.createElement(
 							'h5',
 							{ style: _navbar.NavbarStyles.leftText },
-							'Link Rank | Main | Newest | About | Submit'
+							'Link Rank | ',
+							_react2.default.createElement(
+								_reactRouter.Link,
+								{ to: '/' },
+								'Main'
+							),
+							' | Newest | About | ',
+							_react2.default.createElement(
+								_reactRouter.Link,
+								{ to: 'submit' },
+								'Submit'
+							)
 						)
 					),
 					_react2.default.createElement(
@@ -22634,6 +22650,7 @@
 	  switch (action.type) {
 	    case 'ADD_POST':
 	      return [].concat(_toConsumableArray(state), [{
+	        id: action.id,
 	        title: action.title,
 	        url: action.url,
 	        score: action.score,
@@ -22698,6 +22715,10 @@
 			value: function componentWillMount() {
 				(0, _index.getPosts)();
 			}
+
+			//only show the first 30 links
+			//include More button to download the next 30 links
+
 		}, {
 			key: 'render',
 			value: function render() {
@@ -22708,7 +22729,7 @@
 						'div',
 						{ style: { marginLeft: 70, marginRight: 70 } },
 						_react2.default.createElement(_navbar.Navbar, { selected: 'MAIN' }),
-						_react2.default.createElement(_posts.Posts, { posts: this.props.posts })
+						_react2.default.createElement(_posts.Posts, { posts: this.props.posts, type: 'MAIN' })
 					)
 				);
 			}
@@ -23453,16 +23474,19 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.submitPost = exports.getPosts = exports.rootUrl = undefined;
+	exports.getPost = exports.submitPost = exports.getPosts = exports.rootUrl = undefined;
 
 	var _getPosts = __webpack_require__(214);
 
 	var _submitPost = __webpack_require__(387);
 
+	var _getPost = __webpack_require__(390);
+
 	var rootUrl = exports.rootUrl = 'http://localhost:1337/';
 
 	exports.getPosts = _getPosts.getPosts;
 	exports.submitPost = _submitPost.submitPost;
+	exports.getPost = _getPost.getPost;
 
 /***/ },
 /* 214 */
@@ -23492,7 +23516,7 @@
 			return data.json();
 		}).then(function (posts) {
 			posts.forEach(function (post) {
-				_store.store.dispatch((0, _index.addPost)(post.title, post.url, post.score, post.numberOfComments, post.user.name, post.rank, post.createdAt));
+				_store.store.dispatch((0, _index.addPost)(post.id, post.title, post.url, post.score, post.numberOfComments, post.user.name, post.rank, post.createdAt));
 			});
 		});
 	};
@@ -23521,9 +23545,10 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	var addPost = exports.addPost = function addPost(title, url, score, comments, author, rank, date) {
+	var addPost = exports.addPost = function addPost(id, title, url, score, comments, author, rank, date) {
 		return {
 			type: 'ADD_POST',
+			id: id,
 			title: title,
 			url: url,
 			score: score,
@@ -43256,6 +43281,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(328);
+
 	var _post = __webpack_require__(381);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -43351,18 +43378,30 @@
 					}
 				};
 
+				var formattedRank = function formattedRank(type, rank) {
+					if (type === 'DISCUSS') {
+						return _react2.default.createElement(
+							'h4',
+							{ style: { fontFamily: 'Oxygen', fontSize: 14, marginTop: 2, textAlign: 'right' } },
+							' '
+						);
+					} else if (type === 'MAIN') {
+						return _react2.default.createElement(
+							'h4',
+							{ style: { fontFamily: 'Oxygen', fontSize: 14, marginTop: 2, textAlign: 'right' } },
+							_this2.props.num,
+							'.'
+						);
+					}
+				};
+
 				return _react2.default.createElement(
 					'div',
 					{ style: { display: 'flex', flex: 1, overflow: 'hidden' } },
 					_react2.default.createElement(
 						'div',
 						{ style: { float: 'left', width: 28 } },
-						_react2.default.createElement(
-							'h4',
-							{ style: { fontFamily: 'Oxygen', fontSize: 14, marginTop: 2, textAlign: 'right' } },
-							this.props.num,
-							'.'
-						)
+						formattedRank(this.props.type, this.props.num)
 					),
 					_react2.default.createElement(
 						'div',
@@ -43406,8 +43445,8 @@
 							),
 							' | ',
 							_react2.default.createElement(
-								'a',
-								{ href: '/', onMouseEnter: toggleComment, onMouseLeave: toggleComment, style: commentsStyle },
+								_reactRouter.Link,
+								{ to: '/item/' + this.props.post.id, onMouseEnter: toggleComment, onMouseLeave: toggleComment, style: commentsStyle },
 								displayComments(this.props.post.comments)
 							)
 						)
@@ -43461,10 +43500,10 @@
 			key: 'render',
 			value: function render() {
 
-				var displayLinks = function displayLinks(posts) {
+				var displayLinks = function displayLinks(posts, type) {
 					if (posts) {
 						return posts.map(function (post, i) {
-							return _react2.default.createElement(_post.Post, { post: post, key: i, num: i });
+							return _react2.default.createElement(_post.Post, { post: post, key: i, num: i, type: type });
 						});
 					}
 				};
@@ -43472,7 +43511,7 @@
 				return _react2.default.createElement(
 					'div',
 					{ style: { backgroundColor: '#F7F7F7', marginTop: 0 } },
-					displayLinks(this.props.posts)
+					displayLinks(this.props.posts, this.props.type)
 				);
 			}
 		}]);
@@ -43582,6 +43621,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	var validUrl = __webpack_require__(388);
+
 	var SubmitForms = function (_Component) {
 		_inherits(SubmitForms, _Component);
 
@@ -43621,8 +43662,9 @@
 				};
 
 				var submit = function submit() {
-
-					if (_this2.state.url.length === 0 || _this2.state.title.length < 8) {
+					if (_this2.state.url.length === 0 || _this2.state.title.length < 5) {
+						return _this2.setState({ error: true });
+					} else if (validUrl.isUri(_this2.state.url) === undefined) {
 						return _this2.setState({ error: true });
 					} else {
 						var post = {
@@ -43820,7 +43862,6 @@
 	};
 
 	var submitPost = exports.submitPost = function submitPost(post) {
-		//validate that the submitted url is a valid url
 		return httpRequest(post).then(function (data) {
 			return data.json();
 		}).then(function (post) {
@@ -43830,6 +43871,284 @@
 				return false;
 			}
 		});
+	};
+
+/***/ },
+/* 388 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {(function(module) {
+	    'use strict';
+
+	    module.exports.is_uri = is_iri;
+	    module.exports.is_http_uri = is_http_iri;
+	    module.exports.is_https_uri = is_https_iri;
+	    module.exports.is_web_uri = is_web_iri;
+	    // Create aliases
+	    module.exports.isUri = is_iri;
+	    module.exports.isHttpUri = is_http_iri;
+	    module.exports.isHttpsUri = is_https_iri;
+	    module.exports.isWebUri = is_web_iri;
+
+
+	    // private function
+	    // internal URI spitter method - direct from RFC 3986
+	    var splitUri = function(uri) {
+	        var splitted = uri.match(/(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*)(?:\?([^#]*))?(?:#(.*))?/);
+	        return splitted;
+	    };
+
+	    function is_iri(value) {
+	        if (!value) {
+	            return;
+	        }
+
+	        // check for illegal characters
+	        if (/[^a-z0-9\:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=\.\-\_\~\%]/i.test(value)) return;
+
+	        // check for hex escapes that aren't complete
+	        if (/%[^0-9a-f]/i.test(value)) return;
+	        if (/%[0-9a-f](:?[^0-9a-f]|$)/i.test(value)) return;
+
+	        var splitted = [];
+	        var scheme = '';
+	        var authority = '';
+	        var path = '';
+	        var query = '';
+	        var fragment = '';
+	        var out = '';
+
+	        // from RFC 3986
+	        splitted = splitUri(value);
+	        scheme = splitted[1]; 
+	        authority = splitted[2];
+	        path = splitted[3];
+	        query = splitted[4];
+	        fragment = splitted[5];
+
+	        // scheme and path are required, though the path can be empty
+	        if (!(scheme && scheme.length && path.length >= 0)) return;
+
+	        // if authority is present, the path must be empty or begin with a /
+	        if (authority && authority.length) {
+	            if (!(path.length === 0 || /^\//.test(path))) return;
+	        } else {
+	            // if authority is not present, the path must not start with //
+	            if (/^\/\//.test(path)) return;
+	        }
+
+	        // scheme must begin with a letter, then consist of letters, digits, +, ., or -
+	        if (!/^[a-z][a-z0-9\+\-\.]*$/.test(scheme.toLowerCase()))  return;
+
+	        // re-assemble the URL per section 5.3 in RFC 3986
+	        out += scheme + ':';
+	        if (authority && authority.length) {
+	            out += '//' + authority;
+	        }
+
+	        out += path;
+
+	        if (query && query.length) {
+	            out += '?' + query;
+	        }
+
+	        if (fragment && fragment.length) {
+	            out += '#' + fragment;
+	        }
+
+	        return out;
+	    }
+
+	    function is_http_iri(value, allowHttps) {
+	        if (!is_iri(value)) {
+	            return;
+	        }
+
+	        var splitted = [];
+	        var scheme = '';
+	        var authority = '';
+	        var path = '';
+	        var port = '';
+	        var query = '';
+	        var fragment = '';
+	        var out = '';
+
+	        // from RFC 3986
+	        splitted = splitUri(value);
+	        scheme = splitted[1]; 
+	        authority = splitted[2];
+	        path = splitted[3];
+	        query = splitted[4];
+	        fragment = splitted[5];
+
+	        if (!scheme)  return;
+
+	        if(allowHttps) {
+	            if (scheme.toLowerCase() != 'https') return;
+	        } else {
+	            if (scheme.toLowerCase() != 'http') return;
+	        }
+
+	        // fully-qualified URIs must have an authority section that is
+	        // a valid host
+	        if (!authority) {
+	            return;
+	        }
+
+	        // enable port component
+	        if (/:(\d+)$/.test(authority)) {
+	            port = authority.match(/:(\d+)$/)[0];
+	            authority = authority.replace(/:\d+$/, '');
+	        }
+
+	        out += scheme + ':';
+	        out += '//' + authority;
+	        
+	        if (port) {
+	            out += port;
+	        }
+	        
+	        out += path;
+	        
+	        if(query && query.length){
+	            out += '?' + query;
+	        }
+
+	        if(fragment && fragment.length){
+	            out += '#' + fragment;
+	        }
+	        
+	        return out;
+	    }
+
+	    function is_https_iri(value) {
+	        return is_http_iri(value, true);
+	    }
+
+	    function is_web_iri(value) {
+	        return (is_http_iri(value) || is_https_iri(value));
+	    }
+
+	})(module);
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(191)(module)))
+
+/***/ },
+/* 389 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.DiscussView = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(204);
+
+	var _navbar = __webpack_require__(180);
+
+	var _post = __webpack_require__(382);
+
+	var _index = __webpack_require__(213);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Discuss = function (_Component) {
+		_inherits(Discuss, _Component);
+
+		function Discuss() {
+			_classCallCheck(this, Discuss);
+
+			return _possibleConstructorReturn(this, (Discuss.__proto__ || Object.getPrototypeOf(Discuss)).apply(this, arguments));
+		}
+
+		_createClass(Discuss, [{
+			key: 'componentWillMount',
+			value: function componentWillMount() {}
+		}, {
+			key: 'render',
+			value: function render() {
+
+				return _react2.default.createElement(
+					'div',
+					null,
+					_react2.default.createElement(
+						'div',
+						{ style: { marginLeft: 70, marginRight: 70 } },
+						_react2.default.createElement(_navbar.Navbar, { selected: 'NONE' }),
+						_react2.default.createElement(_post.Post, { post: this.props.post, type: 'DISCUSS' })
+					)
+				);
+			}
+		}]);
+
+		return Discuss;
+	}(_react.Component);
+
+	var filterPost = function filterPost(posts, id) {
+		if (posts.length === 0) {
+			return (0, _index.getPost)(id).then(function (post) {
+				return post;
+			});
+		} else {
+			return posts.find(function (post) {
+				return post.id == id;
+			});
+		}
+	};
+
+	var mapStateToProps = function mapStateToProps(state, ownProps) {
+		return {
+			post: filterPost(state.posts, ownProps.params.itemId)
+		};
+	};
+
+	var DiscussView = (0, _reactRedux.connect)(mapStateToProps)(Discuss);
+
+	exports.DiscussView = DiscussView;
+
+/***/ },
+/* 390 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.getPost = undefined;
+
+	var _store = __webpack_require__(182);
+
+	var _index = __webpack_require__(215);
+
+	var _index2 = __webpack_require__(213);
+
+	var httpRequest = function httpRequest(id) {
+		var url = _index2.rootUrl + 'api/post/' + id;
+		return fetch(url, { method: 'GET' });
+	};
+
+	var getPost = exports.getPost = function getPost(id) {
+		return httpRequest(id).then(function (data) {
+			return data.json();
+		}).then(function (post) {
+			_store.store.dispatch((0, _index.addPost)(post.id, post.title, post.url, post.score, post.numberOfComments, post.user.name, post.rank, post.createdAt));
+		});
+		return post;
 	};
 
 /***/ }

@@ -17,6 +17,7 @@ export const getPosts = () => {
 		posts.forEach((post) => {
 			store.dispatch(
 				addPost(
+					post.id,
 					post.title,
 					post.url,
 					post.score,

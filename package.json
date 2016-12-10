@@ -26,6 +26,7 @@
     "redux-thunk": "^2.1.0",
     "sequelize": "^3.27.0",
     "thunk": "0.0.1",
+    "valid-url": "^1.0.9",
     "webpack": "^1.14.0"
   },
   "devDependencies": {

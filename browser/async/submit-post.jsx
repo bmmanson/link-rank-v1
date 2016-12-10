@@ -14,7 +14,6 @@ const httpRequest = (post) => {
 }
 
 export const submitPost = (post) => {
-	//validate that the submitted url is a valid url
 	return httpRequest(post)
 	.then((data) => data.json())
 	.then((post) => {

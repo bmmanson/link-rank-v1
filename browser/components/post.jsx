@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Link } from 'react-router';
 let moment = require('moment');
 
 import {PostStyles} from './../styles/post.jsx';
@@ -78,10 +79,22 @@ class Post extends Component {
 			}
 		}
 
+		const formattedRank = (type, rank) => {
+			if (type === 'DISCUSS') {
+				return (
+					<h4 style={{fontFamily: 'Oxygen', fontSize: 14, marginTop: 2, textAlign: 'right'}}> </h4>
+				);
+			} else if (type === 'MAIN') {
+				return (
+					<h4 style={{fontFamily: 'Oxygen', fontSize: 14, marginTop: 2, textAlign: 'right'}}>{this.props.num}.</h4>
+				);
+			}
+		}
+
 		return (
 			<div style={{display: 'flex', flex: 1, overflow: 'hidden'}}>
 				<div style={{float: 'left', width: 28}}>
-					<h4 style={{fontFamily: 'Oxygen', fontSize: 14, marginTop: 2, textAlign: 'right'}}>{this.props.num}.</h4>					
+					{formattedRank(this.props.type, this.props.num)}					
 				</div>
 				<div style={{float: 'left', width: 10}}>
 					<h3 style={{fontFamily: 'Oxygen', fontSize: 10, marginTop: 5, marginLeft: 2, textAlign: 'center'}}>▲</h3>
@@ -94,7 +107,7 @@ class Post extends Component {
 							</a>
 						</h5>
 						<h6 style={PostStyles.otherText}>
-							{formattedScore(this.props.post.score)} by <a href={'/'} onMouseEnter={toggleUser} onMouseLeave={toggleUser} style={userStyle}>{this.props.post.author}</a> {formattedTime(this.props.post.date)} | <span style={hideStyle} onMouseEnter={toggleHide} onMouseLeave={toggleHide}>hide</span> | <a href={'/'} onMouseEnter={toggleComment} onMouseLeave={toggleComment} style={commentsStyle}>{displayComments(this.props.post.comments)}</a>
+							{formattedScore(this.props.post.score)} by <a href={'/'} onMouseEnter={toggleUser} onMouseLeave={toggleUser} style={userStyle}>{this.props.post.author}</a> {formattedTime(this.props.post.date)} | <span style={hideStyle} onMouseEnter={toggleHide} onMouseLeave={toggleHide}>hide</span> | <Link to={`/item/${this.props.post.id}`} onMouseEnter={toggleComment} onMouseLeave={toggleComment} style={commentsStyle}>{displayComments(this.props.post.comments)}</Link>
 						</h6>
 				</div>
 			</div>

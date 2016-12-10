@@ -18,6 +18,25 @@ router.get('/', function (req, res, next) {
 	}).catch(next);
 });
 
+router.get('/:id', function (req, res, next) {
+	var id = req.params.id;
+	Post.findOne({
+		where: 
+			{
+			id: id
+			},
+		include: [
+			{
+				model: User,
+				as: "user"
+			}
+		]
+	})
+	.then(function (post) {
+		res.json(post);
+	}).catch(next);
+})
+
 router.post('/new', function (req, res, next) {
 	Post.create({
 		title: req.body.title,
