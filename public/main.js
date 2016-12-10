@@ -44077,7 +44077,13 @@
 
 		_createClass(Discuss, [{
 			key: 'componentWillMount',
-			value: function componentWillMount() {}
+
+
+			//description
+
+			value: function componentWillMount() {
+				//get comments
+			}
 		}, {
 			key: 'render',
 			value: function render() {
@@ -44087,7 +44093,7 @@
 					null,
 					_react2.default.createElement(
 						'div',
-						{ style: { marginLeft: 70, marginRight: 70 } },
+						{ style: { marginLeft: 70, marginRight: 70, backgroundColor: '#F7F7F7' } },
 						_react2.default.createElement(_navbar.Navbar, { selected: 'NONE' }),
 						_react2.default.createElement(_post.Post, { post: this.props.post, type: 'DISCUSS' })
 					)

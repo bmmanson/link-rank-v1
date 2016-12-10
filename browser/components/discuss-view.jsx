@@ -8,15 +8,17 @@ import { getPost } from './../async/index.jsx';
 
 class Discuss extends Component {
 
+//description
+
 	componentWillMount () {
-	
+	//get comments
 	}
 
 	render () {
 
 		return (
 			<div>
-				<div style={{marginLeft: 70, marginRight: 70}}>
+				<div style={{marginLeft: 70, marginRight: 70, backgroundColor:'#F7F7F7'}}>
 					<Navbar selected={'NONE'} />
 					<Post post={this.props.post} type={'DISCUSS'} />
 
@@ -29,7 +31,7 @@ class Discuss extends Component {
 const filterPost = (posts, id) => {
 	if (posts.length === 0) {
 		return getPost(id)
-		.then((post) => post)
+		.then((post) => post);
 	} else {
 		return posts.find(post => post.id == id);
 	}

@@ -48,6 +48,26 @@ var data = {
 			text: "a website for explanatory journalism",
 			userId: 2
 		}
+	],
+	comment: [
+		{
+			text: 'A',
+			authorId: 2,
+			postId: 1,
+			parentId: null
+		},
+		{
+			text: 'B',
+			authorId: 1,
+			postId: 1,
+			parentId: 1
+		},
+		{
+			text: 'C',
+			authorId: 3,
+			postId: 1,
+			parentId: 2
+		}
 	]
 }
 

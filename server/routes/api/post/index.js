@@ -4,6 +4,8 @@ var Post = require('./../../../models/post');
 var User = require('./../../../models/user');
 var router = express.Router();
 
+router.use('/comment', require('./comment.js'));
+
 router.get('/', function (req, res, next) {
 	Post.findAll({
 		include:[

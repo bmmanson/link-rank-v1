@@ -16,7 +16,6 @@ User.hasMany(Comment, {as: "author", foreignKey: "authorId"});
 Comment.belongsTo(User, {as: "author", foreignKey: "authorId"});
 Post.hasMany(Comment, {as: "comment", foreignKey: "postId"});
 Comment.belongsTo(Post, {as: "comment", foreignKey: "postId"});
-Comment.hasMany(Comment, {as: "parent", foreignKey: "parentId"});
 Comment.belongsTo(Comment, {as: "parent", foreignKey: "parentId"});
 
 
