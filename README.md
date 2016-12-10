@@ -1,1 +1,1 @@
-A Hacker News clone, built with React, Node and SQL
+A Hacker News clone, built with from scratch with React, Node and SQL
