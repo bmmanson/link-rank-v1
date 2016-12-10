@@ -2,7 +2,7 @@ export const LinkStyles = {
 	container: {
 		fontFamily: 'Oxygen', 
 		marginTop: 0, 
-		marginBottom: 0,
+		marginBottom: 2,
 		marginLeft: 5
 	},
 	linkText: {
@@ -10,7 +10,6 @@ export const LinkStyles = {
 		marginBottom: 1,
 		color: '#424242',
 		fontWeight: 'bold',
-		textDecorationLine: 'none'
 	},
 	otherText: {
 		marginTop: 0, 

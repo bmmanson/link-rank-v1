@@ -22815,15 +22815,63 @@
 	var Link = function (_Component) {
 		_inherits(Link, _Component);
 
-		function Link() {
+		function Link(props) {
 			_classCallCheck(this, Link);
 
-			return _possibleConstructorReturn(this, (Link.__proto__ || Object.getPrototypeOf(Link)).apply(this, arguments));
+			var _this = _possibleConstructorReturn(this, (Link.__proto__ || Object.getPrototypeOf(Link)).call(this, props));
+
+			_this.state = {
+				hide: false,
+				comments: false,
+				user: false,
+				voted: false
+			};
+			return _this;
 		}
 
 		_createClass(Link, [{
 			key: 'render',
 			value: function render() {
+				var _this2 = this;
+
+				var toggleHide = function toggleHide() {
+					_this2.setState({ hide: !_this2.state.hide });
+				};
+
+				var toggleComment = function toggleComment() {
+					_this2.setState({ comments: !_this2.state.comments });
+				};
+
+				var toggleUser = function toggleUser() {
+					_this2.setState({ user: !_this2.state.user });
+				};
+
+				var hideStyle;
+				if (this.state.hide) {
+					hideStyle = {
+						textDecoration: 'underline'
+					};
+				} else {
+					hideStyle = {};
+				}
+
+				var commentsStyle = {
+					color: '#828282'
+				};
+				if (this.state.comments) {
+					commentsStyle.textDecoration = 'underline';
+				} else {
+					commentsStyle.textDecoration = 'none';
+				}
+
+				var userStyle = {
+					color: '#828282'
+				};
+				if (this.state.user) {
+					userStyle.textDecoration = 'underline';
+				} else {
+					userStyle.textDecoration = 'none';
+				}
 
 				var formattedTime = function formattedTime(date) {
 					if (date) {
@@ -22852,7 +22900,7 @@
 					{ style: { display: 'flex', flex: 1, overflow: 'hidden' } },
 					_react2.default.createElement(
 						'div',
-						{ style: { float: 'left', width: 26 } },
+						{ style: { float: 'left', width: 28 } },
 						_react2.default.createElement(
 							'h4',
 							{ style: { fontFamily: 'Oxygen', fontSize: 14, marginTop: 2, textAlign: 'right' } },
@@ -22877,7 +22925,8 @@
 							{ style: _link.LinkStyles.linkText },
 							_react2.default.createElement(
 								'a',
-								{ href: this.props.link.url, style: _link.LinkStyles.linkText },
+								{ href: this.props.link.url,
+									style: _link.LinkStyles.linkText },
 								this.props.link.title
 							)
 						),
@@ -22886,11 +22935,25 @@
 							{ style: _link.LinkStyles.otherText },
 							formattedScore(this.props.link.score),
 							' by ',
-							this.props.link.author,
+							_react2.default.createElement(
+								'a',
+								{ href: '/', onMouseEnter: toggleUser, onMouseLeave: toggleUser, style: userStyle },
+								this.props.link.author
+							),
 							' ',
 							formattedTime(this.props.link.date),
-							' | hide | ',
-							displayComments(this.props.link.comments)
+							' | ',
+							_react2.default.createElement(
+								'span',
+								{ style: hideStyle, onMouseEnter: toggleHide, onMouseLeave: toggleHide },
+								'hide'
+							),
+							' | ',
+							_react2.default.createElement(
+								'a',
+								{ href: '/', onMouseEnter: toggleComment, onMouseLeave: toggleComment, style: commentsStyle },
+								displayComments(this.props.link.comments)
+							)
 						)
 					)
 				);
@@ -23718,15 +23781,14 @@
 		container: {
 			fontFamily: 'Oxygen',
 			marginTop: 0,
-			marginBottom: 0,
+			marginBottom: 2,
 			marginLeft: 5
 		},
 		linkText: {
 			marginTop: 1,
 			marginBottom: 1,
 			color: '#424242',
-			fontWeight: 'bold',
-			textDecorationLine: 'none'
+			fontWeight: 'bold'
 		},
 		otherText: {
 			marginTop: 0,
