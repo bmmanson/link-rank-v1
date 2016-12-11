@@ -5,6 +5,7 @@ import { Navbar } from './navbar.jsx';
 import { Post } from './post.jsx';
 import { AddComment } from './add-comment.jsx';
 import { Comments } from './comments.jsx';
+import { Footer } from './footer.jsx';
 import { 
 	getPost, 
 	getComments 
@@ -25,7 +26,8 @@ class Discuss extends Component {
 					<Navbar selected={'NONE'} />
 					<Post post={this.props.post} type={'DISCUSS'} />
 					<AddComment />
-					<Comments comments={this.props.comments} />
+					<Comments comments={this.props.comments}/>
+					<Footer />
 				</div>
 			</div>
 		);

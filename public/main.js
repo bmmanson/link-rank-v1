@@ -22692,6 +22692,8 @@
 
 	var _posts = __webpack_require__(383);
 
+	var _footer = __webpack_require__(397);
+
 	var _index = __webpack_require__(213);
 
 	var _store = __webpack_require__(182);
@@ -22730,9 +22732,10 @@
 					null,
 					_react2.default.createElement(
 						'div',
-						{ style: { marginLeft: 70, marginRight: 70 } },
+						{ style: { marginLeft: 70, marginRight: 70, backgroundColor: '#F7F7F7' } },
 						_react2.default.createElement(_navbar.Navbar, { selected: 'MAIN' }),
-						_react2.default.createElement(_posts.Posts, { posts: this.props.posts, type: 'MAIN' })
+						_react2.default.createElement(_posts.Posts, { posts: this.props.posts, type: 'MAIN' }),
+						_react2.default.createElement(_footer.Footer, null)
 					)
 				);
 			}
@@ -44069,6 +44072,8 @@
 
 	var _comments = __webpack_require__(395);
 
+	var _footer = __webpack_require__(397);
+
 	var _index = __webpack_require__(213);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -44109,7 +44114,8 @@
 						_react2.default.createElement(_navbar.Navbar, { selected: 'NONE' }),
 						_react2.default.createElement(_post.Post, { post: this.props.post, type: 'DISCUSS' }),
 						_react2.default.createElement(_addComment.AddComment, null),
-						_react2.default.createElement(_comments.Comments, { comments: this.props.comments })
+						_react2.default.createElement(_comments.Comments, { comments: this.props.comments }),
+						_react2.default.createElement(_footer.Footer, null)
 					)
 				);
 			}
@@ -44466,10 +44472,19 @@
 					{ style: { fontFamily: 'Oxygen' } },
 					_react2.default.createElement(
 						'div',
+						{ style: { float: 'left', marginRight: 2 } },
+						_react2.default.createElement(
+							'p',
+							{ style: { margin: 0, fontSize: 10 } },
+							'\u25B2'
+						)
+					),
+					_react2.default.createElement(
+						'div',
 						null,
 						_react2.default.createElement(
 							'p',
-							{ style: { fontSize: 11, marginBottom: 4 } },
+							{ style: { fontSize: 11, marginBottom: 1 } },
 							this.props.comment.author,
 							' - ',
 							formattedTime(this.props.comment.date),
@@ -44477,12 +44492,12 @@
 						),
 						_react2.default.createElement(
 							'p',
-							{ style: { fontSize: 14, marginTop: 4, marginBottom: 0 } },
+							{ style: { fontSize: 14, marginTop: 1, marginBottom: 0 } },
 							this.props.comment.text
 						),
 						_react2.default.createElement(
 							'p',
-							{ style: { fontSize: 11, marginTop: 4, textDecoration: 'underline' } },
+							{ style: { fontSize: 11, marginTop: 2, textDecoration: 'underline' } },
 							'reply'
 						)
 					),
@@ -44499,6 +44514,60 @@
 	}(_react.Component);
 
 	exports.Comment = Comment;
+
+/***/ },
+/* 397 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.Footer = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Footer = function (_Component) {
+		_inherits(Footer, _Component);
+
+		function Footer() {
+			_classCallCheck(this, Footer);
+
+			return _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).apply(this, arguments));
+		}
+
+		_createClass(Footer, [{
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					'div',
+					{ style: { paddingTop: 10, paddingBottom: 10 } },
+					_react2.default.createElement(
+						'p',
+						{ style: { textAlign: 'center', fontFamily: 'Oxygen', fontSize: 11 } },
+						'Guidelines | FAQ | Contact | Github'
+					)
+				);
+			}
+		}]);
+
+		return Footer;
+	}(_react.Component);
+
+	exports.Footer = Footer;
 
 /***/ }
 /******/ ]);

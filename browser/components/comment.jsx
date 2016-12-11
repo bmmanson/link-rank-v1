@@ -26,14 +26,17 @@ class Comment extends Component {
 
 		return (
 			<div style={{fontFamily: 'Oxygen'}}>
+				<div style={{float: 'left', marginRight: 2}}>
+					<p style={{margin: 0, fontSize: 10}}>▲</p>
+				</div>
 				<div>
-					<p style={{fontSize: 11, marginBottom: 4}}>
+					<p style={{fontSize: 11, marginBottom: 1}}>
 						{this.props.comment.author} - {formattedTime(this.props.comment.date)} [-]
 					</p>
-					<p style={{fontSize: 14, marginTop: 4, marginBottom: 0}}>
+					<p style={{fontSize: 14, marginTop: 1, marginBottom: 0}}>
 						{this.props.comment.text}
 					</p>
-					<p style={{fontSize: 11, marginTop: 4, textDecoration: 'underline'}}>
+					<p style={{fontSize: 11, marginTop: 2, textDecoration: 'underline'}}>
 						reply
 					</p>
 				</div>
