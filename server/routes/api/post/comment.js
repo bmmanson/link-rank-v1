@@ -3,6 +3,7 @@ var Promise = require('bluebird');
 var Post = require('./../../../models/post');
 var User = require('./../../../models/user');
 var Comment = require('./../../../models/comment');
+var CommentPoint = require('./../../../models/comment-point');
 var router = express.Router();
 
 router.get('/:id', function (req, res, next) {
@@ -48,6 +49,28 @@ router.post('/new', function (req, res, next) {
 	})
 	.then(function (comment) {
 		res.json(comment);
+	}).catch(next);
+});
+
+router.post('/upvote', function (req, res, next) {
+	CommentPoint.create({
+		userId: req.body.userId, //change to req.user.id when login is setup
+		commentId: req.body.commentId
+	}).then(function (upvote) {
+		res.json(upvote);
+	}).catch(next);
+});
+
+router.delete('/downvote', function (req, res, next) {
+	CommentPoint.findOne({
+		where: {
+			userId: req.body.userId, //change to req.user.id when login is setup
+			commentId: req.body.commentId
+		}
+	}).then(function (downvote) {
+		downvote.destroy();
+	}).then(function (downvote) {
+		res.json({valid: true});
 	}).catch(next);
 });
 
