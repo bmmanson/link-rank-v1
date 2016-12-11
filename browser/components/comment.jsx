@@ -4,13 +4,12 @@ let moment = require('moment');
 import {Comments} from './comments.jsx';
 import {AddComment} from './add-comment.jsx';
 
+//a tree structure
 //for each comment, add a comments component.
 //if it is not an empty array, pass to it the children of the current comment
 
-//reply to comment
-//when replying, "reply" is replaced with addComment
-
 //be able to hide comments
+//when hiding a comment, all child comments are also hidden
 
 class Comment extends Component {
 
@@ -61,6 +60,36 @@ class Comment extends Component {
 			}
 		}
 
+		const hidden = (hidden) => {
+			if (!hidden) {
+				return (
+				<div>
+					<div>
+						<p style={{fontSize: 12, marginTop: 1, marginBottom: 0}}>
+							{this.props.comment.text}
+						</p>
+						{displayReply(this.props.comment, this.state.replying)}
+					</div>
+					<div>
+						{renderChildren(this.props.comment.children)}
+					</div>
+				</div>
+				);
+			}
+		}
+
+		const toggleHide = () => {
+			return this.setState({hidden: !this.state.hidden});
+		}
+
+		const hideButton = (hidden) => {
+			if (hidden) {
+				return (<span onClick={toggleHide}>[+]</span>);
+			} else {
+				return (<span onClick={toggleHide}>[-]</span>);
+			}
+		}
+
 		return (
 			<div style={{fontFamily: 'Verdana'}}>
 				<div style={{float: 'left', marginRight: 2}}>
@@ -68,16 +97,10 @@ class Comment extends Component {
 				</div>
 				<div>
 					<p style={{fontSize: 11, marginBottom: 1, color: '#828282'}}>
-						{this.props.comment.author} - {formattedTime(this.props.comment.date)} [-]
+						{this.props.comment.author} - {formattedTime(this.props.comment.date)} {hideButton(this.state.hidden)}
 					</p>
-					<p style={{fontSize: 12, marginTop: 1, marginBottom: 0}}>
-						{this.props.comment.text}
-					</p>
-					{displayReply(this.props.comment, this.state.replying)}
 				</div>
-				<div>
-					{renderChildren(this.props.comment.children)}
-				</div>
+				{hidden(this.state.hidden)}
 			</div>
 		);
 	}
