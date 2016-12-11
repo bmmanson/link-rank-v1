@@ -68,7 +68,7 @@ const organizeCommentsAsTree = (comments) => {
 		let curKey = comments[i].id.toString();
 		table[curKey] = comments[i];
 	}
-	return arr;
+	return arr.sort((a,b) => a.score < b.score);
 }
 
 const mapStateToProps = (state, ownProps) => {

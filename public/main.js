@@ -44334,7 +44334,9 @@
 			var curKey = comments[i].id.toString();
 			table[curKey] = comments[i];
 		}
-		return arr;
+		return arr.sort(function (a, b) {
+			return a.score < b.score;
+		});
 	};
 
 	var mapStateToProps = function mapStateToProps(state, ownProps) {
