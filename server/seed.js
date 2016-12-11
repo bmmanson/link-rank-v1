@@ -51,22 +51,34 @@ var data = {
 	],
 	comment: [
 		{
-			text: 'A',
+			text: "In my limited experience this is science, art, and craft. I don't think there is a specific method to do this in an automated way.",
 			authorId: 2,
 			postId: 1,
 			parentId: null
 		},
 		{
-			text: 'B',
+			text: "Have you looked into Snowflake? Seems like their solution satisfies most of your requirements, including native ingestion of unstructured data. The one caveat is that all source data must first be loaded to S3.",
 			authorId: 1,
 			postId: 1,
 			parentId: 1
 		},
 		{
-			text: 'C',
+			text: "Great question, but I don't see this much different from other industries or companies with millions or billions of dollars at stake. They don't all roll their own software inhouse, and most companies (hedgefunds or not, small or even large) simply cannot afford to for financial and commercial risk-management reasons unless they can justify the software truly being a core competitive competency.",
 			authorId: 3,
 			postId: 1,
 			parentId: 2
+		},
+		{
+			text: "The same line of inquiry has been evaluated for most 3rd party software that companies rely on. For this specific instance of data collection and cleaning, I'm imagining it's not going to be a much different calculus, although perhaps you'll see a higher percentage of firms choosing to roll their own if they have the chops and pockets (e.g. Two Sigma, Bridgewater, Goldman Sachs, etc.).",
+			authorId: 3,
+			postId: 1,
+			parentId: 1
+		},
+		{
+			text: "My last company did this. You don't know how hard it is to get people to turn their data over to you.",
+			authorId: 1,
+			postId: 1,
+			parentId: null
 		}
 	]
 }

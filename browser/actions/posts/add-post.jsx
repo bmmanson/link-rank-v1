@@ -9,5 +9,5 @@ export const addPost = (id, title, url, score, comments, author, rank, date) => 
 		author,
 		rank,
 		date
-	}
+	};
 };

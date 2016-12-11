@@ -22627,8 +22627,11 @@
 
 	var _posts = __webpack_require__(200);
 
+	var _comments = __webpack_require__(392);
+
 	exports.default = (0, _redux.combineReducers)({
-		posts: _posts.posts
+		posts: _posts.posts,
+		comments: _comments.comments
 	});
 
 /***/ },
@@ -23474,7 +23477,7 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.getPost = exports.submitPost = exports.getPosts = exports.rootUrl = undefined;
+	exports.getComments = exports.getPost = exports.submitPost = exports.getPosts = exports.rootUrl = undefined;
 
 	var _getPosts = __webpack_require__(214);
 
@@ -23482,11 +23485,14 @@
 
 	var _getPost = __webpack_require__(390);
 
+	var _getComments = __webpack_require__(394);
+
 	var rootUrl = exports.rootUrl = 'http://localhost:1337/';
 
 	exports.getPosts = _getPosts.getPosts;
 	exports.submitPost = _submitPost.submitPost;
 	exports.getPost = _getPost.getPost;
+	exports.getComments = _getComments.getComments;
 
 /***/ },
 /* 214 */
@@ -23530,11 +23536,14 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.addPost = undefined;
+	exports.addComment = exports.addPost = undefined;
 
 	var _addPost = __webpack_require__(216);
 
+	var _addComment = __webpack_require__(393);
+
 	exports.addPost = _addPost.addPost;
+	exports.addComment = _addComment.addComment;
 
 /***/ },
 /* 216 */
@@ -44056,6 +44065,10 @@
 
 	var _post = __webpack_require__(382);
 
+	var _addComment = __webpack_require__(391);
+
+	var _comments = __webpack_require__(395);
+
 	var _index = __webpack_require__(213);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -44082,12 +44095,11 @@
 			//description
 
 			value: function componentWillMount() {
-				//get comments
+				(0, _index.getComments)(this.props.params.itemId);
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-
 				return _react2.default.createElement(
 					'div',
 					null,
@@ -44095,7 +44107,9 @@
 						'div',
 						{ style: { marginLeft: 70, marginRight: 70, backgroundColor: '#F7F7F7' } },
 						_react2.default.createElement(_navbar.Navbar, { selected: 'NONE' }),
-						_react2.default.createElement(_post.Post, { post: this.props.post, type: 'DISCUSS' })
+						_react2.default.createElement(_post.Post, { post: this.props.post, type: 'DISCUSS' }),
+						_react2.default.createElement(_addComment.AddComment, null),
+						_react2.default.createElement(_comments.Comments, { comments: this.props.comments })
 					)
 				);
 			}
@@ -44116,9 +44130,30 @@
 		}
 	};
 
+	var organizeCommentsAsTree = function organizeCommentsAsTree(comments) {
+		var table = {};
+		var arr = [];
+		for (var i = 0; i < comments.length; i++) {
+			comments[i].children = [];
+			if (!comments[i].parentId) {
+				arr.push(comments[i]);
+			} else {
+				var parentKey = comments[i].parentId.toString();
+				if (table[parentKey]) {
+					table[parentKey].children.push(comments[i]);
+				}
+			}
+			var curKey = comments[i].id.toString();
+			table[curKey] = comments[i];
+		}
+		console.log(arr);
+		return arr;
+	};
+
 	var mapStateToProps = function mapStateToProps(state, ownProps) {
 		return {
-			post: filterPost(state.posts, ownProps.params.itemId)
+			post: filterPost(state.posts, ownProps.params.itemId),
+			comments: organizeCommentsAsTree(state.comments)
 		};
 	};
 
@@ -44156,6 +44191,314 @@
 		});
 		return post;
 	};
+
+/***/ },
+/* 391 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.AddComment = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AddComment = function (_Component) {
+		_inherits(AddComment, _Component);
+
+		function AddComment() {
+			_classCallCheck(this, AddComment);
+
+			return _possibleConstructorReturn(this, (AddComment.__proto__ || Object.getPrototypeOf(AddComment)).apply(this, arguments));
+		}
+
+		_createClass(AddComment, [{
+			key: 'render',
+
+
+			/*
+	  add comment component should be displayed not only at the top
+	  of the discuss view, but also when the user presses the reply
+	  button at the bottom of each comment
+	  */
+
+			value: function render() {
+				return _react2.default.createElement(
+					'div',
+					null,
+					_react2.default.createElement('textarea', null),
+					_react2.default.createElement(
+						'button',
+						null,
+						'add comment'
+					)
+				);
+			}
+		}]);
+
+		return AddComment;
+	}(_react.Component);
+
+	exports.AddComment = AddComment;
+
+/***/ },
+/* 392 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var comments = exports.comments = function comments() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case 'ADD_COMMENT':
+	      return [].concat(_toConsumableArray(state), [{
+	        id: action.id,
+	        text: action.text,
+	        parentId: action.parentId,
+	        score: action.score,
+	        date: action.date,
+	        author: action.author,
+	        authorId: action.authorId
+	      }]);
+	    case 'DELETE_ALL_COMMENTS':
+	      return [];
+	    default:
+	      return state;
+	  }
+	};
+
+/***/ },
+/* 393 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var addComment = exports.addComment = function addComment(id, text, parentId, score, date, author, authorId) {
+		return {
+			type: 'ADD_COMMENT',
+			id: id,
+			text: text,
+			parentId: parentId,
+			score: score,
+			date: date,
+			author: author,
+			authorId: authorId
+		};
+	};
+
+/***/ },
+/* 394 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.getComments = undefined;
+
+	var _store = __webpack_require__(182);
+
+	var _index = __webpack_require__(215);
+
+	var _index2 = __webpack_require__(213);
+
+	var httpRequest = function httpRequest(id) {
+		var url = _index2.rootUrl + 'api/post/comment/' + id;
+		return fetch(url, { method: 'GET' });
+	};
+
+	var getComments = exports.getComments = function getComments(id) {
+		return httpRequest(id).then(function (data) {
+			return data.json();
+		}).then(function (comments) {
+			comments.forEach(function (comment) {
+				_store.store.dispatch((0, _index.addComment)(comment.id, comment.text, comment.parentId, comment.score, comment.createdAt, comment.author.name, comment.author.id));
+			});
+		});
+	};
+
+/***/ },
+/* 395 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.Comments = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _comment = __webpack_require__(396);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Comments = function (_Component) {
+		_inherits(Comments, _Component);
+
+		function Comments() {
+			_classCallCheck(this, Comments);
+
+			return _possibleConstructorReturn(this, (Comments.__proto__ || Object.getPrototypeOf(Comments)).apply(this, arguments));
+		}
+
+		_createClass(Comments, [{
+			key: 'render',
+			value: function render() {
+
+				var renderComments = function renderComments(comments) {
+					return comments.map(function (comment, i) {
+						return _react2.default.createElement(_comment.Comment, { comment: comment, key: i });
+					});
+				};
+
+				return _react2.default.createElement(
+					'div',
+					{ style: { marginLeft: 30 } },
+					renderComments(this.props.comments)
+				);
+			}
+		}]);
+
+		return Comments;
+	}(_react.Component);
+
+	exports.Comments = Comments;
+
+/***/ },
+/* 396 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.Comment = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _comments = __webpack_require__(395);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var moment = __webpack_require__(218);
+
+	var Comment = function (_Component) {
+		_inherits(Comment, _Component);
+
+		function Comment() {
+			_classCallCheck(this, Comment);
+
+			return _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).apply(this, arguments));
+		}
+
+		_createClass(Comment, [{
+			key: 'render',
+
+
+			//for each comment, add a comments component.
+			//if it is not an empty array, pass to it the children of the current comment
+
+			value: function render() {
+
+				var renderChildren = function renderChildren(children) {
+					if (children.length > 0) {
+						return _react2.default.createElement(_comments.Comments, { comments: children });
+					}
+				};
+
+				var formattedTime = function formattedTime(date) {
+					if (date) {
+						return moment(date).fromNow();
+					}
+				};
+
+				return _react2.default.createElement(
+					'div',
+					{ style: { fontFamily: 'Oxygen' } },
+					_react2.default.createElement(
+						'div',
+						null,
+						_react2.default.createElement(
+							'p',
+							{ style: { fontSize: 11, marginBottom: 4 } },
+							this.props.comment.author,
+							' - ',
+							formattedTime(this.props.comment.date),
+							' [-]'
+						),
+						_react2.default.createElement(
+							'p',
+							{ style: { fontSize: 14, marginTop: 4, marginBottom: 0 } },
+							this.props.comment.text
+						),
+						_react2.default.createElement(
+							'p',
+							{ style: { fontSize: 11, marginTop: 4, textDecoration: 'underline' } },
+							'reply'
+						)
+					),
+					_react2.default.createElement(
+						'div',
+						null,
+						renderChildren(this.props.comment.children)
+					)
+				);
+			}
+		}]);
+
+		return Comment;
+	}(_react.Component);
+
+	exports.Comment = Comment;
 
 /***/ }
 /******/ ]);
