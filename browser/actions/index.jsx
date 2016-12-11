@@ -5,6 +5,8 @@ import {deleteAllPosts} from './posts/delete-all-posts.jsx';
 
 import {addComment} from './comments/add-comment.jsx';
 import {deleteAllComments} from './comments/delete-all-comments.jsx';
+import {upvoteComment} from './comments/upvote-comment.jsx';
+import {downvoteComment} from './comments/downvote-comment.jsx';
 
 export {
 	addPost,
@@ -12,5 +14,7 @@ export {
 	upvotePost,
 	downvotePost,
 	deleteAllPosts,
-	deleteAllComments
+	deleteAllComments,
+	upvoteComment,
+	downvoteComment
 };

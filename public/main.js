@@ -43652,6 +43652,27 @@
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+	var comment = function comment(state, action) {
+	  switch (action.type) {
+	    case 'UPVOTE_COMMENT':
+	      if (state.id !== action.id) {
+	        return state;
+	      }
+	      return Object.assign({}, state, {
+	        score: state.score + 1,
+	        voted: true
+	      });
+	    case 'DOWNVOTE_COMMENT':
+	      if (state.id !== action.id) {
+	        return state;
+	      }
+	      return Object.assign({}, state, {
+	        score: state.score - 1,
+	        voted: false
+	      });
+	  }
+	};
+
 	var comments = exports.comments = function comments() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 	  var action = arguments[1];
@@ -43670,6 +43691,14 @@
 	      }]);
 	    case 'DELETE_ALL_COMMENTS':
 	      return [];
+	    case 'UPVOTE_COMMENT':
+	      return state.map(function (c) {
+	        return comment(c, action);
+	      });
+	    case 'DOWNVOTE_COMMENT':
+	      return state.map(function (c) {
+	        return comment(c, action);
+	      });
 	    default:
 	      return state;
 	  }
@@ -43684,7 +43713,7 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.deleteAllComments = exports.deleteAllPosts = exports.downvotePost = exports.upvotePost = exports.addComment = exports.addPost = undefined;
+	exports.downvoteComment = exports.upvoteComment = exports.deleteAllComments = exports.deleteAllPosts = exports.downvotePost = exports.upvotePost = exports.addComment = exports.addPost = undefined;
 
 	var _addPost = __webpack_require__(381);
 
@@ -43698,12 +43727,18 @@
 
 	var _deleteAllComments = __webpack_require__(400);
 
+	var _upvoteComment = __webpack_require__(401);
+
+	var _downvoteComment = __webpack_require__(402);
+
 	exports.addPost = _addPost.addPost;
 	exports.addComment = _addComment.addComment;
 	exports.upvotePost = _upvotePost.upvotePost;
 	exports.downvotePost = _downvotePost.downvotePost;
 	exports.deleteAllPosts = _deleteAllPosts.deleteAllPosts;
 	exports.deleteAllComments = _deleteAllComments.deleteAllComments;
+	exports.upvoteComment = _upvoteComment.upvoteComment;
+	exports.downvoteComment = _downvoteComment.downvoteComment;
 
 /***/ },
 /* 381 */
@@ -44977,6 +45012,38 @@
 	var deleteAllComments = exports.deleteAllComments = function deleteAllComments() {
 		return {
 			type: 'DELETE_ALL_COMMENTS'
+		};
+	};
+
+/***/ },
+/* 401 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var upvoteComment = exports.upvoteComment = function upvoteComment(id) {
+		return {
+			type: 'UPVOTE_POST',
+			id: id
+		};
+	};
+
+/***/ },
+/* 402 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var downvoteComment = exports.downvoteComment = function downvoteComment(id) {
+		return {
+			type: 'DOWNVOTE_POST',
+			id: id
 		};
 	};
 
