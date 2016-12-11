@@ -13,19 +13,28 @@ import {
 
 class Discuss extends Component {
 
-//description
+	//description
+	//sort by score, but only on root array of tree. after that, chronological by date created
 
 	componentWillMount () {
 		getComments(this.props.params.itemId);
 	}
 
 	render () {
+
+		const comment = {
+			authorId: 1, //replace
+			postId: this.props.params.itemId
+		};
+
 		return (
 			<div>
 				<div style={{marginLeft: 70, marginRight: 70, backgroundColor:'#F7F7F7'}}>
 					<Navbar selected={'NONE'} />
 					<Post post={this.props.post} type={'DISCUSS'} />
-					<AddComment />
+					<div style={{marginLeft: 30}}>
+						<AddComment comment={comment} />
+					</div>
 					<Comments comments={this.props.comments}/>
 					<Footer />
 				</div>
@@ -59,7 +68,6 @@ const organizeCommentsAsTree = (comments) => {
 		let curKey = comments[i].id.toString();
 		table[curKey] = comments[i];
 	}
-	console.log(arr);
 	return arr;
 }
 

@@ -7,6 +7,7 @@ export const comments = (state = [], action) => {
           id: action.id,
           text: action.text,
           parentId: action.parentId,
+          postId: action.postId,
           score: action.score,
           date: action.date,
           author: action.author,

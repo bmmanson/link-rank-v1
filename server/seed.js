@@ -47,38 +47,92 @@ var data = {
 			url: "http://www.vox.com",
 			text: "a website for explanatory journalism",
 			userId: 2
-		}
+		},
+		{
+			title: 'Hacker News',
+			url: 'https://news.ycombinator.com/',
+			text: 'the inspriation for this site',
+			userId: 1
+		},
+		{
+			title: "Jerusalem Post",
+			url: 'http://www.jpost.com/',
+			text: 'a local newspaper',
+			userId: 2
+		},
+		{
+			title: "Ha'aretz",
+			url: 'http://www.haaretz.com',
+			text: 'news about Israel',
+			userId: 1
+		},
+		{
+			title: "Twitter",
+			url: 'http://www.twitter.com',
+			text: 'another social network',
+			userId: 3
+		},
+		{
+			title: "Pitchfork",
+			url: "http://pitchfork.com",
+			text: "pretentious music reviews",
+			userId: 3
+		},
+		{
+			title: "Smitten Kitchen",
+			url: "http://www.smittenkitchen.com",
+			text: "delicious recipes",
+			userId: 2
+		},
+		{
+			title: "YouTube",
+			url: "http://www.youtube.com",
+			text: "cat videos",
+			userId: 2
+		},
 	],
 	comment: [
 		{
-			text: "In my limited experience this is science, art, and craft. I don't think there is a specific method to do this in an automated way.",
+			text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Itaque sensibus rationem adiunxit et ratione effecta sensus non reliquit. Aeque enim contingit omnibus fidibus, ut incontentae sint. Sit hoc ultimum bonorum, quod nunc a me defenditur; Oratio me istius philosophi non offendit; Duo Reges: constructio interrete. De quibus cupio scire quid sentias.",
 			authorId: 2,
 			postId: 1,
 			parentId: null
 		},
 		{
-			text: "Have you looked into Snowflake? Seems like their solution satisfies most of your requirements, including native ingestion of unstructured data. The one caveat is that all source data must first be loaded to S3.",
+			text: "Non autem hoc: igitur ne illud quidem. Semper enim ita adsumit aliquid, ut ea, quae prima dederit, non deserat. Cave putes quicquam esse verius. Si quidem, inquit, tollerem, sed relinquo. Non igitur bene. Sint modo partes vitae beatae. Tuo vero id quidem, inquam, arbitratu. Nam, ut sint illa vendibiliora, haec uberiora certe sunt. Atque haec ita iustitiae propria sunt, ut sint virtutum reliquarum communia.",
 			authorId: 1,
 			postId: 1,
 			parentId: 1
 		},
 		{
-			text: "Great question, but I don't see this much different from other industries or companies with millions or billions of dollars at stake. They don't all roll their own software inhouse, and most companies (hedgefunds or not, small or even large) simply cannot afford to for financial and commercial risk-management reasons unless they can justify the software truly being a core competitive competency.",
+			text: "Ab hoc autem quaedam non melius quam veteres, quaedam omnino relicta. Utinam quidem dicerent alium alio beatiorem! Iam ruinas videres. A primo, ut opinor, animantium ortu petitur origo summi boni. Quorum sine causa fieri nihil putandum est. Primum divisit ineleganter; Itaque fecimus. Quid ei reliquisti, nisi te, quoquo modo loqueretur, intellegere, quid diceret?",
+			authorId: 3,
+			postId: 1,
+			parentId: 1
+		},
+		{
+			text: "Graecum enim hunc versum nostis omnes: Suavis laborum est praeteritorum memoria. Quamquam te quidem video minime esse deterritum. Quae enim adhuc protulisti, popularia sunt, ego autem a te elegantiora desidero. Quorum sine causa fieri nihil putandum est. Quae similitudo in genere etiam humano apparet. Aliter enim explicari, quod quaeritur, non potest. Tecum optime, deinde etiam cum mediocri amico.",
+			authorId: 1,
+			postId: 1,
+			parentId: null
+		},
+		{
+			text: "Idem iste, inquam, de voluptate quid sentit? Dicet pro me ipsa virtus nec dubitabit isti vestro beato M. Hic ambiguo ludimur.",
 			authorId: 3,
 			postId: 1,
 			parentId: 2
 		},
 		{
-			text: "The same line of inquiry has been evaluated for most 3rd party software that companies rely on. For this specific instance of data collection and cleaning, I'm imagining it's not going to be a much different calculus, although perhaps you'll see a higher percentage of firms choosing to roll their own if they have the chops and pockets (e.g. Two Sigma, Bridgewater, Goldman Sachs, etc.).",
-			authorId: 3,
-			postId: 1,
-			parentId: 1
-		},
-		{
-			text: "My last company did this. You don't know how hard it is to get people to turn their data over to you.",
+			text: "Sed eget scelerisque mauris. Nunc lobortis, libero a aliquam dictum, turpis arcu venenatis mauris, luctus venenatis mauris dui ac lacus.",
 			authorId: 1,
 			postId: 1,
-			parentId: null
+			parentId: 2
+		},
+		{
+			text: "Nulla facilisi. Cras sit amet tempor nisi. Cras vel velit sit amet nibh hendrerit cursus id ac leo. Suspendisse cursus lorem ut urna cursus, non viverra nunc consequat. Aliquam maximus auctor eleifend. Etiam tristique libero fringilla dui fermentum dignissim. Sed quis aliquam ante.",
+			authorId: 3,
+			postId: 1,
+			parentId: 2
 		}
 	]
 }

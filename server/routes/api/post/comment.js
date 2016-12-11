@@ -24,4 +24,31 @@ router.get('/:id', function (req, res, next) {
 	}).catch(next);
 });
 
+router.post('/new', function (req, res, next) {
+	Comment.create({
+		authorId: req.body.authorId,
+		parentId: req.body.parentId,
+		postId: req.body.postId,
+		text: req.body.text
+	})
+	.then(function (comment) {
+		return Comment.findOne({
+			where:
+				{
+					id: comment.id
+				},
+			include: 
+				[
+					{
+					model: User,
+					as: 'author'
+					}
+				]
+		});
+	})
+	.then(function (comment) {
+		res.json(comment);
+	}).catch(next);
+});
+
 module.exports = router;

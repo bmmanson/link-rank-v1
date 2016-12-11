@@ -19,6 +19,7 @@ export const getComments = (id) => {
 					comment.id,
 					comment.text,
 					comment.parentId,
+					comment.postId,
 					comment.score,
 					comment.createdAt,
 					comment.author.name,

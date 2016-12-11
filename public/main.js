@@ -44098,6 +44098,7 @@
 
 
 			//description
+			//sort by score, but only on root array of tree. after that, chronological by date created
 
 			value: function componentWillMount() {
 				(0, _index.getComments)(this.props.params.itemId);
@@ -44105,6 +44106,12 @@
 		}, {
 			key: 'render',
 			value: function render() {
+
+				var comment = {
+					authorId: 1, //replace
+					postId: this.props.params.itemId
+				};
+
 				return _react2.default.createElement(
 					'div',
 					null,
@@ -44113,7 +44120,11 @@
 						{ style: { marginLeft: 70, marginRight: 70, backgroundColor: '#F7F7F7' } },
 						_react2.default.createElement(_navbar.Navbar, { selected: 'NONE' }),
 						_react2.default.createElement(_post.Post, { post: this.props.post, type: 'DISCUSS' }),
-						_react2.default.createElement(_addComment.AddComment, null),
+						_react2.default.createElement(
+							'div',
+							{ style: { marginLeft: 30 } },
+							_react2.default.createElement(_addComment.AddComment, { comment: comment })
+						),
 						_react2.default.createElement(_comments.Comments, { comments: this.props.comments }),
 						_react2.default.createElement(_footer.Footer, null)
 					)
@@ -44152,7 +44163,6 @@
 			var curKey = comments[i].id.toString();
 			table[curKey] = comments[i];
 		}
-		console.log(arr);
 		return arr;
 	};
 
@@ -44215,6 +44225,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _submitComment = __webpack_require__(398);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -44226,32 +44238,71 @@
 	var AddComment = function (_Component) {
 		_inherits(AddComment, _Component);
 
-		function AddComment() {
+		function AddComment(props) {
 			_classCallCheck(this, AddComment);
 
-			return _possibleConstructorReturn(this, (AddComment.__proto__ || Object.getPrototypeOf(AddComment)).apply(this, arguments));
+			var _this = _possibleConstructorReturn(this, (AddComment.__proto__ || Object.getPrototypeOf(AddComment)).call(this, props));
+
+			_this.state = {
+				text: '',
+				sent: false
+			};
+			return _this;
 		}
 
 		_createClass(AddComment, [{
 			key: 'render',
-
-
-			/*
-	  add comment component should be displayed not only at the top
-	  of the discuss view, but also when the user presses the reply
-	  button at the bottom of each comment
-	  */
-
 			value: function render() {
+				var _this2 = this;
+
+				var submit = function submit() {
+					if (_this2.state.text.length > 2) {
+
+						var parentId = void 0;
+						if (_this2.props.comment.id) {
+							parentId = _this2.props.comment.id;
+						} else {
+							parentId = null;
+						}
+
+						var newComment = {
+							authorId: _this2.props.comment.authorId,
+							parentId: parentId,
+							postId: _this2.props.comment.postId,
+							text: _this2.state.text
+						};
+						(0, _submitComment.submitComment)(newComment);
+						_this2.setState({
+							text: '',
+							sent: true
+						});
+					}
+				};
+
+				var displayCommentAdded = function displayCommentAdded(sent) {
+					if (sent) {
+						return _react2.default.createElement(
+							'p',
+							{ style: { margin: 0, marginTop: 2, marginBottom: 2, fontSize: 11, fontFamily: 'Verdana' } },
+							'Comment added.'
+						);
+					}
+				};
+
 				return _react2.default.createElement(
 					'div',
 					null,
-					_react2.default.createElement('textarea', null),
+					_react2.default.createElement('textarea', { style: { display: 'block', height: 100, width: 400 },
+						value: this.state.text,
+						onChange: function onChange(event) {
+							return _this2.setState({ text: event.target.value });
+						} }),
 					_react2.default.createElement(
 						'button',
-						null,
+						{ onClick: submit },
 						'add comment'
-					)
+					),
+					displayCommentAdded(this.state.sent)
 				);
 			}
 		}]);
@@ -44283,6 +44334,7 @@
 	        id: action.id,
 	        text: action.text,
 	        parentId: action.parentId,
+	        postId: action.postId,
 	        score: action.score,
 	        date: action.date,
 	        author: action.author,
@@ -44304,12 +44356,13 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	var addComment = exports.addComment = function addComment(id, text, parentId, score, date, author, authorId) {
+	var addComment = exports.addComment = function addComment(id, text, parentId, postId, score, date, author, authorId) {
 		return {
 			type: 'ADD_COMMENT',
 			id: id,
 			text: text,
 			parentId: parentId,
+			postId: postId,
 			score: score,
 			date: date,
 			author: author,
@@ -44344,7 +44397,7 @@
 			return data.json();
 		}).then(function (comments) {
 			comments.forEach(function (comment) {
-				_store.store.dispatch((0, _index.addComment)(comment.id, comment.text, comment.parentId, comment.score, comment.createdAt, comment.author.name, comment.author.id));
+				_store.store.dispatch((0, _index.addComment)(comment.id, comment.text, comment.parentId, comment.postId, comment.score, comment.createdAt, comment.author.name, comment.author.id));
 			});
 		});
 	};
@@ -44427,6 +44480,8 @@
 
 	var _comments = __webpack_require__(395);
 
+	var _addComment = __webpack_require__(391);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -44437,23 +44492,37 @@
 
 	var moment = __webpack_require__(218);
 
+	//for each comment, add a comments component.
+	//if it is not an empty array, pass to it the children of the current comment
+
+	//reply to comment
+	//when replying, "reply" is replaced with addComment
+
+	//be able to hide comments
+
 	var Comment = function (_Component) {
 		_inherits(Comment, _Component);
 
-		function Comment() {
+		function Comment(props) {
 			_classCallCheck(this, Comment);
 
-			return _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).apply(this, arguments));
+			var _this = _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
+
+			_this.state = {
+				replying: false,
+				hidden: false
+			};
+			return _this;
 		}
 
 		_createClass(Comment, [{
 			key: 'render',
-
-
-			//for each comment, add a comments component.
-			//if it is not an empty array, pass to it the children of the current comment
-
 			value: function render() {
+				var _this2 = this;
+
+				var toggleReply = function toggleReply() {
+					return _this2.setState({ replying: !_this2.state.replying });
+				};
 
 				var renderChildren = function renderChildren(children) {
 					if (children.length > 0) {
@@ -44467,15 +44536,36 @@
 					}
 				};
 
+				var displayReply = function displayReply(comment, replying) {
+					if (!replying) {
+						return _react2.default.createElement(
+							'p',
+							{ style: { fontSize: 11, marginTop: 2, textDecoration: 'underline' }, onClick: toggleReply },
+							'reply'
+						);
+					} else {
+						return _react2.default.createElement(
+							'div',
+							null,
+							_react2.default.createElement(
+								'p',
+								{ style: { fontSize: 11, marginTop: 2, textDecoration: 'underline' }, onClick: toggleReply },
+								'close'
+							),
+							_react2.default.createElement(_addComment.AddComment, { comment: comment })
+						);
+					}
+				};
+
 				return _react2.default.createElement(
 					'div',
-					{ style: { fontFamily: 'Oxygen' } },
+					{ style: { fontFamily: 'Verdana' } },
 					_react2.default.createElement(
 						'div',
 						{ style: { float: 'left', marginRight: 2 } },
 						_react2.default.createElement(
 							'p',
-							{ style: { margin: 0, fontSize: 10 } },
+							{ style: { margin: 0, fontSize: 10, color: '#828282' } },
 							'\u25B2'
 						)
 					),
@@ -44484,7 +44574,7 @@
 						null,
 						_react2.default.createElement(
 							'p',
-							{ style: { fontSize: 11, marginBottom: 1 } },
+							{ style: { fontSize: 11, marginBottom: 1, color: '#828282' } },
 							this.props.comment.author,
 							' - ',
 							formattedTime(this.props.comment.date),
@@ -44492,14 +44582,10 @@
 						),
 						_react2.default.createElement(
 							'p',
-							{ style: { fontSize: 14, marginTop: 1, marginBottom: 0 } },
+							{ style: { fontSize: 12, marginTop: 1, marginBottom: 0 } },
 							this.props.comment.text
 						),
-						_react2.default.createElement(
-							'p',
-							{ style: { fontSize: 11, marginTop: 2, textDecoration: 'underline' } },
-							'reply'
-						)
+						displayReply(this.props.comment, this.state.replying)
 					),
 					_react2.default.createElement(
 						'div',
@@ -44568,6 +44654,48 @@
 	}(_react.Component);
 
 	exports.Footer = Footer;
+
+/***/ },
+/* 398 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.submitComment = undefined;
+
+	var _index = __webpack_require__(213);
+
+	var _store = __webpack_require__(182);
+
+	var _index2 = __webpack_require__(215);
+
+	var httpRequest = function httpRequest(comment) {
+		var url = _index.rootUrl + 'api/post/comment/new';
+		var data = JSON.stringify(comment);
+		var request = {
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			method: "POST",
+			body: data
+		};
+		return fetch(url, request);
+	};
+
+	var submitComment = exports.submitComment = function submitComment(comment) {
+		return httpRequest(comment).then(function (data) {
+			return data.json();
+		}).then(function (comment) {
+			if (comment) {
+				_store.store.dispatch((0, _index2.addComment)(comment.id, comment.text, comment.parentId, comment.postId, comment.score, comment.createdAt, comment.author.name, comment.author.id));
+			} else {
+				return false;
+			}
+		});
+	};
 
 /***/ }
 /******/ ]);
