@@ -4,6 +4,11 @@ let moment = require('moment');
 
 import {PostStyles} from './../styles/post.jsx';
 
+import {
+	upvotePostOnServer,
+	downvotePostOnServer
+} from './../async/index.jsx';
+
 class Post extends Component {
 	
 	constructor(props) {
@@ -12,7 +17,8 @@ class Post extends Component {
 			hide: false,
 			comments: false,
 			user: false,
-			voted: false
+			voted: false,
+			downvote: false
 		};
 	}
 
@@ -28,6 +34,10 @@ class Post extends Component {
 
 		const toggleUser = () => {
 			this.setState({user: !this.state.user});
+		}
+
+		const toggleDownvote = () => {
+			this.setState({downvote: !this.state.downvote});
 		}
 
 		var hideStyle;
@@ -55,6 +65,15 @@ class Post extends Component {
 			userStyle.textDecoration = 'underline';
 		} else {
 			userStyle.textDecoration = 'none';
+		}
+
+		var downvoteStyle = {
+			color: '#828282'
+		}
+		if (this.state.downvote) {
+			downvoteStyle.textDecoration = 'underline';
+		} else {
+			downvoteStyle.textDecoration = 'none';
 		}
 
 		const formattedTime = (date) => {
@@ -91,13 +110,44 @@ class Post extends Component {
 			}
 		}
 
+		const upvote = () => {
+			upvotePostOnServer({
+				postId: this.props.post.id,
+				userId: 1 //change when login setup
+			});
+		}
+
+		const downvote = () => {
+			downvotePostOnServer({
+				postId: this.props.post.id,
+				userId: 1 //change when login setup
+			});
+			toggleDownvote();
+		}
+
+		const displayVoteButton = (voted) => {
+			if (voted) {
+				return (<h3 style={{fontFamily: 'Oxygen', fontSize: 10, marginTop: 5, marginLeft: 2, textAlign: 'center'}}> </h3>);
+			} else {
+				return (<h3 onClick={upvote} style={{fontFamily: 'Oxygen', fontSize: 10, marginTop: 5, marginLeft: 2, textAlign: 'center'}}>▲</h3>);
+			}
+		}
+
+		const displayDownvoteButton = (voted) => {
+			if (voted) {
+				return (<span><span style={downvoteStyle} onClick={downvote} onMouseEnter={toggleDownvote} onMouseLeave={toggleDownvote}>unvote</span> |</span>);
+			} else {
+				return (<span></span>);
+			}
+		}
+
 		return (
 			<div style={{display: 'flex', flex: 1, overflow: 'hidden'}}>
 				<div style={{float: 'left', width: 28}}>
 					{formattedRank(this.props.type, this.props.num)}					
 				</div>
 				<div style={{float: 'left', width: 10}}>
-					<h3 style={{fontFamily: 'Oxygen', fontSize: 10, marginTop: 5, marginLeft: 2, textAlign: 'center'}}>▲</h3>
+					{displayVoteButton(this.props.post.voted)}
 				</div>
 				<div style={PostStyles.container}>
 						<h5 style={PostStyles.linkText}>
@@ -107,7 +157,7 @@ class Post extends Component {
 							</a>
 						</h5>
 						<h6 style={PostStyles.otherText}>
-							{formattedScore(this.props.post.score)} by <a href={'/'} onMouseEnter={toggleUser} onMouseLeave={toggleUser} style={userStyle}>{this.props.post.author}</a> {formattedTime(this.props.post.date)} | <span style={hideStyle} onMouseEnter={toggleHide} onMouseLeave={toggleHide}>hide</span> | <Link to={`/item/${this.props.post.id}`} onMouseEnter={toggleComment} onMouseLeave={toggleComment} style={commentsStyle}>{displayComments(this.props.post.comments)}</Link>
+							{formattedScore(this.props.post.score)} by <a href={'/'} onMouseEnter={toggleUser} onMouseLeave={toggleUser} style={userStyle}>{this.props.post.author}</a> {formattedTime(this.props.post.date)} | <span style={hideStyle} onMouseEnter={toggleHide} onMouseLeave={toggleHide}>hide</span> | {displayDownvoteButton(this.props.post.voted)} <Link to={`/item/${this.props.post.id}`} onMouseEnter={toggleComment} onMouseLeave={toggleComment} style={commentsStyle}>{displayComments(this.props.post.comments)}</Link>
 						</h6>
 				</div>
 			</div>

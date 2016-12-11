@@ -41,6 +41,7 @@ router.get('/:id', function (req, res, next) {
 });
 
 router.post('/upvote', function (req, res, next) {
+	console.log("upvote hit");
 	PostPoint.create({
 		userId: req.body.userId, //change to req.user.id when login is setup
 		postId: req.body.postId
@@ -50,16 +51,16 @@ router.post('/upvote', function (req, res, next) {
 });
 
 router.delete('/downvote', function (req, res, next) {
+	console.log("downvote hit");
 	PostPoint.findOne({
 		where: {
 			userId: req.body.userId, //change to req.user.id when login is setup
 			postId: req.body.postId
 		}
 	}).then(function (downvote) {
-		console.log(downvote);
 		downvote.destroy();
 	}).then(function (downvote) {
-		res.json();
+		res.json({valid: true});
 	}).catch(next);
 });
 

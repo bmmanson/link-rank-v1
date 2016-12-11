@@ -28230,6 +28230,8 @@
 
 	var _post = __webpack_require__(261);
 
+	var _index = __webpack_require__(373);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -28252,7 +28254,8 @@
 				hide: false,
 				comments: false,
 				user: false,
-				voted: false
+				voted: false,
+				downvote: false
 			};
 			return _this;
 		}
@@ -28272,6 +28275,10 @@
 
 				var toggleUser = function toggleUser() {
 					_this2.setState({ user: !_this2.state.user });
+				};
+
+				var toggleDownvote = function toggleDownvote() {
+					_this2.setState({ downvote: !_this2.state.downvote });
 				};
 
 				var hideStyle;
@@ -28299,6 +28306,15 @@
 					userStyle.textDecoration = 'underline';
 				} else {
 					userStyle.textDecoration = 'none';
+				}
+
+				var downvoteStyle = {
+					color: '#828282'
+				};
+				if (this.state.downvote) {
+					downvoteStyle.textDecoration = 'underline';
+				} else {
+					downvoteStyle.textDecoration = 'none';
 				}
 
 				var formattedTime = function formattedTime(date) {
@@ -28340,6 +28356,54 @@
 					}
 				};
 
+				var upvote = function upvote() {
+					(0, _index.upvotePostOnServer)({
+						postId: _this2.props.post.id,
+						userId: 1 //change when login setup
+					});
+				};
+
+				var downvote = function downvote() {
+					(0, _index.downvotePostOnServer)({
+						postId: _this2.props.post.id,
+						userId: 1 //change when login setup
+					});
+					toggleDownvote();
+				};
+
+				var displayVoteButton = function displayVoteButton(voted) {
+					if (voted) {
+						return _react2.default.createElement(
+							'h3',
+							{ style: { fontFamily: 'Oxygen', fontSize: 10, marginTop: 5, marginLeft: 2, textAlign: 'center' } },
+							' '
+						);
+					} else {
+						return _react2.default.createElement(
+							'h3',
+							{ onClick: upvote, style: { fontFamily: 'Oxygen', fontSize: 10, marginTop: 5, marginLeft: 2, textAlign: 'center' } },
+							'\u25B2'
+						);
+					}
+				};
+
+				var displayDownvoteButton = function displayDownvoteButton(voted) {
+					if (voted) {
+						return _react2.default.createElement(
+							'span',
+							null,
+							_react2.default.createElement(
+								'span',
+								{ style: downvoteStyle, onClick: downvote, onMouseEnter: toggleDownvote, onMouseLeave: toggleDownvote },
+								'unvote'
+							),
+							' |'
+						);
+					} else {
+						return _react2.default.createElement('span', null);
+					}
+				};
+
 				return _react2.default.createElement(
 					'div',
 					{ style: { display: 'flex', flex: 1, overflow: 'hidden' } },
@@ -28351,11 +28415,7 @@
 					_react2.default.createElement(
 						'div',
 						{ style: { float: 'left', width: 10 } },
-						_react2.default.createElement(
-							'h3',
-							{ style: { fontFamily: 'Oxygen', fontSize: 10, marginTop: 5, marginLeft: 2, textAlign: 'center' } },
-							'\u25B2'
-						)
+						displayVoteButton(this.props.post.voted)
 					),
 					_react2.default.createElement(
 						'div',
@@ -28389,6 +28449,8 @@
 								'hide'
 							),
 							' | ',
+							displayDownvoteButton(this.props.post.voted),
+							' ',
 							_react2.default.createElement(
 								_reactRouter.Link,
 								{ to: '/item/' + this.props.post.id, onMouseEnter: toggleComment, onMouseLeave: toggleComment, style: commentsStyle },
@@ -43381,7 +43443,7 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.getComments = exports.getPost = exports.submitPost = exports.getPosts = exports.rootUrl = undefined;
+	exports.downvotePostOnServer = exports.upvotePostOnServer = exports.getComments = exports.getPost = exports.submitPost = exports.getPosts = exports.rootUrl = undefined;
 
 	var _getPosts = __webpack_require__(374);
 
@@ -43391,12 +43453,18 @@
 
 	var _getComments = __webpack_require__(385);
 
+	var _upvotePost = __webpack_require__(397);
+
+	var _downvotePost = __webpack_require__(398);
+
 	var rootUrl = exports.rootUrl = 'http://localhost:1337/';
 
 	exports.getPosts = _getPosts.getPosts;
 	exports.submitPost = _submitPost.submitPost;
 	exports.getPost = _getPost.getPost;
 	exports.getComments = _getComments.getComments;
+	exports.upvotePostOnServer = _upvotePost.upvotePostOnServer;
+	exports.downvotePostOnServer = _downvotePost.downvotePostOnServer;
 
 /***/ },
 /* 374 */
@@ -43519,6 +43587,27 @@
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+	var post = function post(state, action) {
+	  switch (action.type) {
+	    case 'UPVOTE_POST':
+	      if (state.id !== action.id) {
+	        return state;
+	      }
+	      return Object.assign({}, state, {
+	        score: state.score + 1,
+	        voted: true
+	      });
+	    case 'DOWNVOTE_POST':
+	      if (state.id !== action.id) {
+	        return state;
+	      }
+	      return Object.assign({}, state, {
+	        score: state.score - 1,
+	        voted: false
+	      });
+	  }
+	};
+
 	var posts = exports.posts = function posts() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 	  var action = arguments[1];
@@ -43533,10 +43622,19 @@
 	        comments: action.comments,
 	        author: action.author,
 	        rank: action.rank,
-	        date: action.date
+	        date: action.date,
+	        voted: true
 	      }]);
 	    case 'DELETE_ALL_POSTS':
 	      return [];
+	    case 'UPVOTE_POST':
+	      return state.map(function (p) {
+	        return post(p, action);
+	      });
+	    case 'DOWNVOTE_POST':
+	      return state.map(function (p) {
+	        return post(p, action);
+	      });
 	    default:
 	      return state;
 	  }
@@ -43586,14 +43684,20 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.addComment = exports.addPost = undefined;
+	exports.downvotePost = exports.upvotePost = exports.addComment = exports.addPost = undefined;
 
 	var _addPost = __webpack_require__(381);
 
 	var _addComment = __webpack_require__(382);
 
+	var _upvotePost = __webpack_require__(395);
+
+	var _downvotePost = __webpack_require__(396);
+
 	exports.addPost = _addPost.addPost;
 	exports.addComment = _addComment.addComment;
+	exports.upvotePost = _upvotePost.upvotePost;
+	exports.downvotePost = _downvotePost.downvotePost;
 
 /***/ },
 /* 381 */
@@ -44728,6 +44832,115 @@
 	}(_react.Component);
 
 	exports.Comment = Comment;
+
+/***/ },
+/* 395 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var upvotePost = exports.upvotePost = function upvotePost(id) {
+		return {
+			type: 'UPVOTE_POST',
+			id: id
+		};
+	};
+
+/***/ },
+/* 396 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var downvotePost = exports.downvotePost = function downvotePost(id) {
+		return {
+			type: 'DOWNVOTE_POST',
+			id: id
+		};
+	};
+
+/***/ },
+/* 397 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.upvotePostOnServer = undefined;
+
+	var _index = __webpack_require__(373);
+
+	var _store = __webpack_require__(375);
+
+	var _index2 = __webpack_require__(380);
+
+	var httpRequest = function httpRequest(upvote) {
+		var url = _index.rootUrl + 'api/post/upvote';
+		var data = JSON.stringify(upvote);
+		var request = {
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			method: "POST",
+			body: data
+		};
+		return fetch(url, request);
+	};
+
+	var upvotePostOnServer = exports.upvotePostOnServer = function upvotePostOnServer(upvote) {
+		return httpRequest(upvote).then(function (data) {
+			return data.json();
+		}).then(function (upvote) {
+			_store.store.dispatch((0, _index2.upvotePost)(upvote.postId));
+		});
+	};
+
+/***/ },
+/* 398 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.downvotePostOnServer = undefined;
+
+	var _index = __webpack_require__(373);
+
+	var _store = __webpack_require__(375);
+
+	var _index2 = __webpack_require__(380);
+
+	var httpRequest = function httpRequest(downvote) {
+		var url = _index.rootUrl + 'api/post/downvote';
+		var data = JSON.stringify(downvote);
+		var request = {
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			method: "DELETE",
+			body: data
+		};
+		return fetch(url, request);
+	};
+
+	var downvotePostOnServer = exports.downvotePostOnServer = function downvotePostOnServer(downvote) {
+		console.log("downvote in downvote post on server", downvote);
+		return httpRequest(downvote).then(function (data) {
+			return data.json();
+		}).then(function (data) {
+			_store.store.dispatch((0, _index2.downvotePost)(downvote.postId));
+		});
+	};
 
 /***/ }
 /******/ ]);
