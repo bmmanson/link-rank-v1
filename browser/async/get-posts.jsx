@@ -17,14 +17,15 @@ export const getPosts = () => {
 		posts.forEach((post) => {
 			store.dispatch(
 				addPost(
-					post.id,
-					post.title,
-					post.url,
-					post.score,
-					post.numberOfComments,
-					post.user.name,
-					post.rank,
-					post.createdAt
+					post.data.id,
+					post.data.title,
+					post.data.url,
+					post.data.score,
+					post.data.numberOfComments,
+					post.data.user.name,
+					post.data.rank,
+					post.data.createdAt,
+					post.voted
 				)
 			)
 		})

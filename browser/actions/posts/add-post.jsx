@@ -1,4 +1,4 @@
-export const addPost = (id, title, url, score, comments, author, rank, date) => {
+export const addPost = (id, title, url, score, comments, author, rank, date, voted) => {
 	return {
 		type: 'ADD_POST',
 		id,
@@ -8,6 +8,7 @@ export const addPost = (id, title, url, score, comments, author, rank, date) => 
 		comments,
 		author,
 		rank,
-		date
+		date,
+		voted
 	};
 };

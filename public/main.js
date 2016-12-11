@@ -43494,7 +43494,7 @@
 			return data.json();
 		}).then(function (posts) {
 			posts.forEach(function (post) {
-				_store.store.dispatch((0, _index.addPost)(post.id, post.title, post.url, post.score, post.numberOfComments, post.user.name, post.rank, post.createdAt));
+				_store.store.dispatch((0, _index.addPost)(post.data.id, post.data.title, post.data.url, post.data.score, post.data.numberOfComments, post.data.user.name, post.data.rank, post.data.createdAt, post.voted));
 			});
 		});
 	};
@@ -43623,7 +43623,7 @@
 	        author: action.author,
 	        rank: action.rank,
 	        date: action.date,
-	        voted: true
+	        voted: action.voted
 	      }]);
 	    case 'DELETE_ALL_POSTS':
 	      return [];
@@ -43708,7 +43708,7 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	var addPost = exports.addPost = function addPost(id, title, url, score, comments, author, rank, date) {
+	var addPost = exports.addPost = function addPost(id, title, url, score, comments, author, rank, date, voted) {
 		return {
 			type: 'ADD_POST',
 			id: id,
@@ -43718,7 +43718,8 @@
 			comments: comments,
 			author: author,
 			rank: rank,
-			date: date
+			date: date,
+			voted: voted
 		};
 	};
 
@@ -43809,7 +43810,7 @@
 		return httpRequest(id).then(function (data) {
 			return data.json();
 		}).then(function (post) {
-			_store.store.dispatch((0, _index.addPost)(post.id, post.title, post.url, post.score, post.numberOfComments, post.user.name, post.rank, post.createdAt));
+			_store.store.dispatch((0, _index.addPost)(post.data.id, post.data.title, post.data.url, post.data.score, post.data.numberOfComments, post.data.user.name, post.data.rank, post.data.createdAt, post.voted));
 		});
 		return post;
 	};

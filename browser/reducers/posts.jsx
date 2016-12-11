@@ -33,7 +33,7 @@ export const posts = (state = [], action) => {
           author: action.author,
           rank: action.rank,
           date: action.date,
-          voted: true
+          voted: action.voted
         }
       ]
     case 'DELETE_ALL_POSTS':

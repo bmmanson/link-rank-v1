@@ -17,6 +17,36 @@ router.get('/', function (req, res, next) {
 		]
 	})
 	.then(function (posts) {
+		var promisesForPostsWithUserVoted = [];
+
+		posts.forEach(function (post) {
+			promisesForPostsWithUserVoted.push(
+				PostPoint.findOne({
+					where: 
+						{
+						postId: post.id,
+						userId: 1 //change when login setup
+						}
+				})
+				.then(function (userVoted) {
+					if (userVoted) {
+						return {
+							data: post,
+							voted: true
+						};
+					} else {
+						return {
+							data: post,
+							voted: false
+						};
+					}
+				})
+			);
+		});
+
+		return Promise.all(promisesForPostsWithUserVoted);
+	})
+	.then(function (posts) {
 		res.json(posts);
 	}).catch(next);
 });
@@ -34,6 +64,29 @@ router.get('/:id', function (req, res, next) {
 				as: "user"
 			}
 		]
+	})
+	.then(function (post) {
+		return PostPoint.findOne({
+			where: 
+				{
+				postId: id,
+				userId: 1 //change when login setup
+				}
+		})
+		.then(function (userVoted) {
+			console.log(userVoted);
+			if (userVoted) {
+				return {
+					data: post,
+					voted: true
+				};
+			} else {
+				return {
+					data: post,
+					voted: false
+				};
+			}
+		});
 	})
 	.then(function (post) {
 		res.json(post);
