@@ -38,7 +38,6 @@ var PostPoint = db.define('postpoint', {
 				getPostWithMatchingId
 			])
 			.spread(function (comments, points, post) {
-				console.log("SCORE INCREASED", comments.length + points.length);
 				return post.update({score: comments.length + points.length});
 			});
 		},
@@ -62,8 +61,6 @@ var PostPoint = db.define('postpoint', {
 				getPostWithMatchingId
 			])
 			.spread(function (comments, points, post) {
-
-				console.log("SCORE DECREASED", comments.length + points.length);
 				return post.update({score: comments.length + points.length});
 			});
 		}
