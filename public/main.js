@@ -43489,7 +43489,7 @@
 	};
 
 	var getPosts = exports.getPosts = function getPosts() {
-		console.log("GET POSTS");
+		_store.store.dispatch((0, _index.deleteAllPosts)());
 		return httpRequest().then(function (data) {
 			return data.json();
 		}).then(function (posts) {
@@ -43684,20 +43684,26 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.downvotePost = exports.upvotePost = exports.addComment = exports.addPost = undefined;
+	exports.deleteAllComments = exports.deleteAllPosts = exports.downvotePost = exports.upvotePost = exports.addComment = exports.addPost = undefined;
 
 	var _addPost = __webpack_require__(381);
-
-	var _addComment = __webpack_require__(382);
 
 	var _upvotePost = __webpack_require__(395);
 
 	var _downvotePost = __webpack_require__(396);
 
+	var _deleteAllPosts = __webpack_require__(399);
+
+	var _addComment = __webpack_require__(382);
+
+	var _deleteAllComments = __webpack_require__(400);
+
 	exports.addPost = _addPost.addPost;
 	exports.addComment = _addComment.addComment;
 	exports.upvotePost = _upvotePost.upvotePost;
 	exports.downvotePost = _downvotePost.downvotePost;
+	exports.deleteAllPosts = _deleteAllPosts.deleteAllPosts;
+	exports.deleteAllComments = _deleteAllComments.deleteAllComments;
 
 /***/ },
 /* 381 */
@@ -43838,6 +43844,7 @@
 	};
 
 	var getComments = exports.getComments = function getComments(id) {
+		_store.store.dispatch((0, _index.deleteAllComments)());
 		return httpRequest(id).then(function (data) {
 			return data.json();
 		}).then(function (comments) {
@@ -44941,6 +44948,36 @@
 		}).then(function (data) {
 			_store.store.dispatch((0, _index2.downvotePost)(downvote.postId));
 		});
+	};
+
+/***/ },
+/* 399 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var deleteAllPosts = exports.deleteAllPosts = function deleteAllPosts() {
+		return {
+			type: 'DELETE_ALL_POSTS'
+		};
+	};
+
+/***/ },
+/* 400 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var deleteAllComments = exports.deleteAllComments = function deleteAllComments() {
+		return {
+			type: 'DELETE_ALL_COMMENTS'
+		};
 	};
 
 /***/ }

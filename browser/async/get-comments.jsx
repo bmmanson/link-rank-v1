@@ -1,6 +1,9 @@
 import { store } from './../store.jsx';
 
-import { addComment } from './../actions/index.jsx';
+import { 
+	addComment,
+	deleteAllComments 
+} from './../actions/index.jsx';
 
 import { rootUrl } from './index.jsx';
 
@@ -10,6 +13,7 @@ const httpRequest = (id) => {
 }
 
 export const getComments = (id) => {
+	store.dispatch(deleteAllComments());
 	return httpRequest(id)
 	.then((data) => data.json())
 	.then((comments) => {

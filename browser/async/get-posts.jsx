@@ -1,6 +1,9 @@
 import { store } from './../store.jsx';
 
-import { addPost } from './../actions/index.jsx';
+import { 
+	addPost, 
+	deleteAllPosts 
+} from './../actions/index.jsx';
 
 import { rootUrl } from './index.jsx';
 
@@ -10,7 +13,7 @@ const httpRequest = () => {
 }
 
 export const getPosts = () => {
-	console.log("GET POSTS");
+	store.dispatch(deleteAllPosts());
 	return httpRequest()
 	.then((data) => data.json())
 	.then((posts) => {
