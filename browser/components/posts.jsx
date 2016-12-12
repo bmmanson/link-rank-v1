@@ -10,7 +10,7 @@ class Posts extends Component {
 			if (posts) {
 				return (
 					posts.map((post, i) =>
-						(<Post post={post} key={i} num={i} type={type} />)
+						(<Post post={post} key={i} num={i + 1} type={type} />)
 					)
 				);
 			}

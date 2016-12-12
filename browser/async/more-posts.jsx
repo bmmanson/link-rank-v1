@@ -2,7 +2,8 @@ import { store } from './../store.jsx';
 
 import { 
 	addPost, 
-	deleteAllPosts 
+	deleteAllPosts,
+	nextPage 
 } from './../actions/index.jsx';
 
 import { rootUrl } from './index.jsx';
@@ -13,11 +14,11 @@ const httpRequest = () => {
 	return fetch(url, {method: 'GET'});
 }
 
-export const getPosts = () => {
-	store.dispatch(deleteAllPosts());
-	return httpRequest()
+export const morePosts = () => {
+	return httpRequest(id)
 	.then((data) => data.json())
 	.then((posts) => {
+		store.dispatch(nextPage());
 		posts.forEach((post) => {
 			store.dispatch(
 				addPost(

@@ -7,11 +7,11 @@ var Post = db.define('post', {
 		allowNull: false
 	},
 	url: {
-		type: Sequelize.STRING,
+		type: Sequelize.STRING(500),
 		allowNull: false
 	},
 	text: {
-		type: Sequelize.STRING,
+		type: Sequelize.STRING(500),
 		defaultValue: ""
 	},
 	score: {

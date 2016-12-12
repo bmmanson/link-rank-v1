@@ -8,6 +8,8 @@ import {deleteAllComments} from './comments/delete-all-comments.jsx';
 import {upvoteComment} from './comments/upvote-comment.jsx';
 import {downvoteComment} from './comments/downvote-comment.jsx';
 
+import {nextPage} from './session/next-page.jsx';
+
 export {
 	addPost,
 	addComment,
@@ -16,5 +18,6 @@ export {
 	deleteAllPosts,
 	deleteAllComments,
 	upvoteComment,
-	downvoteComment
+	downvoteComment,
+	nextPage
 };

@@ -7,13 +7,17 @@ var router = express.Router();
 
 router.use('/comment', require('./comment.js'));
 
-router.get('/', function (req, res, next) {
+router.get('/main', function (req, res, next) {
 	Post.findAll({
 		include:[
 			{
 				model: User,
 				as: "user"
 			}
+		],
+		limit: 500,
+		order: [
+			['updatedAt', 'DESC']
 		]
 	})
 	.then(function (posts) {

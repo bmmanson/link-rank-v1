@@ -1,6 +1,7 @@
 import { getPosts } from './get-posts.jsx';
 import { submitPost } from './submit-post.jsx';
 import { getPost } from './get-post.jsx';
+import { morePosts } from './more-posts.jsx';
 import { getComments } from './get-comments.jsx';
 import { upvotePostOnServer } from './upvote-post.jsx';
 import { downvotePostOnServer } from './downvote-post.jsx';
@@ -17,5 +18,6 @@ export {
 	upvotePostOnServer,
 	downvotePostOnServer,
 	upvoteCommentOnServer,
-	downvoteCommentOnServer
+	downvoteCommentOnServer,
+	morePosts
 };
