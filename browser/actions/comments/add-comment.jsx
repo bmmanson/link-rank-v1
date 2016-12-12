@@ -1,4 +1,4 @@
-export const addComment = (id, text, parentId, postId, score, date, author, authorId) => {
+export const addComment = (id, text, parentId, postId, score, date, author, authorId, voted) => {
 	return {
 		type: 'ADD_COMMENT',
 		id,
@@ -8,6 +8,7 @@ export const addComment = (id, text, parentId, postId, score, date, author, auth
 		score,
 		date,
 		author,
-		authorId
+		authorId,
+		voted
 	};
 };

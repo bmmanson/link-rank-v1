@@ -27,7 +27,8 @@ export const getComments = (id) => {
 					comment.score,
 					comment.createdAt,
 					comment.author.name,
-					comment.author.id
+					comment.author.id,
+					false
 				)
 			)
 		})

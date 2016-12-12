@@ -53,6 +53,7 @@ router.post('/new', function (req, res, next) {
 });
 
 router.post('/upvote', function (req, res, next) {
+	console.log('upvote hit');
 	CommentPoint.create({
 		userId: req.body.userId, //change to req.user.id when login is setup
 		commentId: req.body.commentId
@@ -62,6 +63,7 @@ router.post('/upvote', function (req, res, next) {
 });
 
 router.delete('/downvote', function (req, res, next) {
+	console.log('downvote hit');
 	CommentPoint.findOne({
 		where: {
 			userId: req.body.userId, //change to req.user.id when login is setup

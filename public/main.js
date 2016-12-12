@@ -43443,7 +43443,7 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.downvotePostOnServer = exports.upvotePostOnServer = exports.getComments = exports.getPost = exports.submitPost = exports.getPosts = exports.rootUrl = undefined;
+	exports.downvoteCommentOnServer = exports.upvoteCommentOnServer = exports.downvotePostOnServer = exports.upvotePostOnServer = exports.getComments = exports.getPost = exports.submitPost = exports.getPosts = exports.rootUrl = undefined;
 
 	var _getPosts = __webpack_require__(374);
 
@@ -43457,6 +43457,10 @@
 
 	var _downvotePost = __webpack_require__(398);
 
+	var _upvoteComment = __webpack_require__(403);
+
+	var _downvoteComment = __webpack_require__(404);
+
 	var rootUrl = exports.rootUrl = 'http://localhost:1337/';
 
 	exports.getPosts = _getPosts.getPosts;
@@ -43465,6 +43469,8 @@
 	exports.getComments = _getComments.getComments;
 	exports.upvotePostOnServer = _upvotePost.upvotePostOnServer;
 	exports.downvotePostOnServer = _downvotePost.downvotePostOnServer;
+	exports.upvoteCommentOnServer = _upvoteComment.upvoteCommentOnServer;
+	exports.downvoteCommentOnServer = _downvoteComment.downvoteCommentOnServer;
 
 /***/ },
 /* 374 */
@@ -43687,7 +43693,8 @@
 	        score: action.score,
 	        date: action.date,
 	        author: action.author,
-	        authorId: action.authorId
+	        authorId: action.authorId,
+	        voted: action.voted
 	      }]);
 	    case 'DELETE_ALL_COMMENTS':
 	      return [];
@@ -43773,7 +43780,7 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	var addComment = exports.addComment = function addComment(id, text, parentId, postId, score, date, author, authorId) {
+	var addComment = exports.addComment = function addComment(id, text, parentId, postId, score, date, author, authorId, voted) {
 		return {
 			type: 'ADD_COMMENT',
 			id: id,
@@ -43783,7 +43790,8 @@
 			score: score,
 			date: date,
 			author: author,
-			authorId: authorId
+			authorId: authorId,
+			voted: voted
 		};
 	};
 
@@ -43884,7 +43892,7 @@
 			return data.json();
 		}).then(function (comments) {
 			comments.forEach(function (comment) {
-				_store.store.dispatch((0, _index.addComment)(comment.id, comment.text, comment.parentId, comment.postId, comment.score, comment.createdAt, comment.author.name, comment.author.id));
+				_store.store.dispatch((0, _index.addComment)(comment.id, comment.text, comment.parentId, comment.postId, comment.score, comment.createdAt, comment.author.name, comment.author.id, false));
 			});
 		});
 	};
@@ -44723,6 +44731,8 @@
 
 	var _addComment = __webpack_require__(391);
 
+	var _index = __webpack_require__(373);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -44750,7 +44760,8 @@
 
 			_this.state = {
 				replying: false,
-				hidden: false
+				hidden: false,
+				downvote: false
 			};
 			return _this;
 		}
@@ -44763,6 +44774,19 @@
 				var toggleReply = function toggleReply() {
 					return _this2.setState({ replying: !_this2.state.replying });
 				};
+
+				var toggleDownvote = function toggleDownvote() {
+					_this2.setState({ downvote: !_this2.state.downvote });
+				};
+
+				var downvoteStyle = {
+					color: '#828282'
+				};
+				if (this.state.downvote) {
+					downvoteStyle.textDecoration = 'underline';
+				} else {
+					downvoteStyle.textDecoration = 'none';
+				}
 
 				var renderChildren = function renderChildren(children) {
 					if (children.length > 0) {
@@ -44841,17 +44865,59 @@
 					}
 				};
 
+				var upvote = function upvote() {
+					console.log("upvote");
+					(0, _index.upvoteCommentOnServer)({
+						commentId: _this2.props.comment.id,
+						userId: 1 //change when login setup
+					});
+				};
+
+				var downvote = function downvote() {
+					(0, _index.downvoteCommentOnServer)({
+						commentId: _this2.props.comment.id,
+						userId: 1 //change when login setup
+					});
+				};
+
+				var downvoteButton = function downvoteButton(voted) {
+					if (voted) {
+						return _react2.default.createElement(
+							'span',
+							{ onClick: downvote },
+							'| ',
+							_react2.default.createElement(
+								'span',
+								{ style: downvoteStyle, onMouseEnter: toggleDownvote, onMouseLeave: toggleDownvote },
+								'unvote'
+							)
+						);
+					}
+				};
+
+				var upvoteButton = function upvoteButton(voted) {
+					if (voted) {
+						return _react2.default.createElement(
+							'p',
+							{ style: { margin: 0, fontSize: 10, color: '#828282' } },
+							' '
+						);
+					} else {
+						return _react2.default.createElement(
+							'p',
+							{ onClick: upvote, style: { margin: 0, fontSize: 10, color: '#828282' } },
+							'\u25B2'
+						);
+					}
+				};
+
 				return _react2.default.createElement(
 					'div',
 					{ style: { fontFamily: 'Verdana' } },
 					_react2.default.createElement(
 						'div',
 						{ style: { float: 'left', marginRight: 2 } },
-						_react2.default.createElement(
-							'p',
-							{ style: { margin: 0, fontSize: 10, color: '#828282' } },
-							'\u25B2'
-						)
+						upvoteButton(this.props.comment.voted)
 					),
 					_react2.default.createElement(
 						'div',
@@ -44862,6 +44928,8 @@
 							this.props.comment.author,
 							' - ',
 							formattedTime(this.props.comment.date),
+							' ',
+							downvoteButton(this.props.comment.voted),
 							' ',
 							hideButton(this.state.hidden)
 						)
@@ -44977,7 +45045,6 @@
 	};
 
 	var downvotePostOnServer = exports.downvotePostOnServer = function downvotePostOnServer(downvote) {
-		console.log("downvote in downvote post on server", downvote);
 		return httpRequest(downvote).then(function (data) {
 			return data.json();
 		}).then(function (data) {
@@ -45026,7 +45093,7 @@
 	});
 	var upvoteComment = exports.upvoteComment = function upvoteComment(id) {
 		return {
-			type: 'UPVOTE_POST',
+			type: 'UPVOTE_COMMENT',
 			id: id
 		};
 	};
@@ -45042,9 +45109,85 @@
 	});
 	var downvoteComment = exports.downvoteComment = function downvoteComment(id) {
 		return {
-			type: 'DOWNVOTE_POST',
+			type: 'DOWNVOTE_COMMENT',
 			id: id
 		};
+	};
+
+/***/ },
+/* 403 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.upvoteCommentOnServer = undefined;
+
+	var _index = __webpack_require__(373);
+
+	var _store = __webpack_require__(375);
+
+	var _index2 = __webpack_require__(380);
+
+	var httpRequest = function httpRequest(upvote) {
+		var url = _index.rootUrl + 'api/post/comment/upvote';
+		var data = JSON.stringify(upvote);
+		var request = {
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			method: "POST",
+			body: data
+		};
+		return fetch(url, request);
+	};
+
+	var upvoteCommentOnServer = exports.upvoteCommentOnServer = function upvoteCommentOnServer(upvote) {
+		return httpRequest(upvote).then(function (data) {
+			return data.json();
+		}).then(function (upvote) {
+			_store.store.dispatch((0, _index2.upvoteComment)(upvote.commentId));
+		});
+	};
+
+/***/ },
+/* 404 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.downvoteCommentOnServer = undefined;
+
+	var _index = __webpack_require__(373);
+
+	var _store = __webpack_require__(375);
+
+	var _index2 = __webpack_require__(380);
+
+	var httpRequest = function httpRequest(downvote) {
+		var url = _index.rootUrl + 'api/post/comment/downvote';
+		var data = JSON.stringify(downvote);
+		var request = {
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			method: "DELETE",
+			body: data
+		};
+		return fetch(url, request);
+	};
+
+	var downvoteCommentOnServer = exports.downvoteCommentOnServer = function downvoteCommentOnServer(downvote) {
+		return httpRequest(downvote).then(function (data) {
+			return data.json();
+		}).then(function (data) {
+			_store.store.dispatch((0, _index2.downvoteComment)(downvote.commentId));
+		});
 	};
 
 /***/ }

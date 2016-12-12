@@ -4,6 +4,11 @@ let moment = require('moment');
 import {Comments} from './comments.jsx';
 import {AddComment} from './add-comment.jsx';
 
+import {
+	upvoteCommentOnServer,
+	downvoteCommentOnServer
+} from './../async/index.jsx';
+
 //a tree structure
 //for each comment, add a comments component.
 //if it is not an empty array, pass to it the children of the current comment
@@ -17,7 +22,8 @@ class Comment extends Component {
 		super(props);
 		this.state = {
 			replying: false,
-			hidden: false
+			hidden: false,
+			downvote: false
 		};
 	}
 
@@ -25,6 +31,19 @@ class Comment extends Component {
 
 		const toggleReply = () => {
 			return this.setState({replying: !this.state.replying});
+		}
+
+		const toggleDownvote = () => {
+			this.setState({downvote: !this.state.downvote});
+		}
+
+		var downvoteStyle = {
+			color: '#828282'
+		}
+		if (this.state.downvote) {
+			downvoteStyle.textDecoration = 'underline';
+		} else {
+			downvoteStyle.textDecoration = 'none';
 		}
 
 		const renderChildren = (children) => {
@@ -90,14 +109,43 @@ class Comment extends Component {
 			}
 		}
 
+		const upvote = () => {
+			console.log("upvote");
+			upvoteCommentOnServer({
+				commentId: this.props.comment.id,
+				userId: 1 //change when login setup
+			});
+		}
+
+		const downvote = () => {
+			downvoteCommentOnServer({
+				commentId: this.props.comment.id,
+				userId: 1 //change when login setup
+			});
+		}
+
+		const downvoteButton = (voted) => {
+			if (voted) {
+				return (<span onClick={downvote}>| <span style={downvoteStyle} onMouseEnter={toggleDownvote} onMouseLeave={toggleDownvote}>unvote</span></span>)
+			}
+		}
+
+		const upvoteButton = (voted) => {
+			if (voted) {
+				return (<p style={{margin: 0, fontSize: 10, color: '#828282'}}> </p>);
+			} else {
+				return (<p onClick={upvote} style={{margin: 0, fontSize: 10, color: '#828282'}}>▲</p>);
+			}
+		}
+
 		return (
 			<div style={{fontFamily: 'Verdana'}}>
 				<div style={{float: 'left', marginRight: 2}}>
-					<p style={{margin: 0, fontSize: 10, color: '#828282'}}>▲</p>
+					{upvoteButton(this.props.comment.voted)}
 				</div>
 				<div>
 					<p style={{fontSize: 11, marginBottom: 1, color: '#828282'}}>
-						{this.props.comment.author} - {formattedTime(this.props.comment.date)} {hideButton(this.state.hidden)}
+						{this.props.comment.author} - {formattedTime(this.props.comment.date)} {downvoteButton(this.props.comment.voted)} {hideButton(this.state.hidden)}
 					</p>
 				</div>
 				{hidden(this.state.hidden)}

@@ -4,6 +4,8 @@ import { getPost } from './get-post.jsx';
 import { getComments } from './get-comments.jsx';
 import { upvotePostOnServer } from './upvote-post.jsx';
 import { downvotePostOnServer } from './downvote-post.jsx';
+import { upvoteCommentOnServer } from './upvote-comment.jsx';
+import { downvoteCommentOnServer } from './downvote-comment.jsx';
 
 export const rootUrl = 'http://localhost:1337/';
 
@@ -13,5 +15,7 @@ export {
 	getPost,
 	getComments,
 	upvotePostOnServer,
-	downvotePostOnServer
+	downvotePostOnServer,
+	upvoteCommentOnServer,
+	downvoteCommentOnServer
 };

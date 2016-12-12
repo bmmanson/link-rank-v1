@@ -1,9 +1,9 @@
 import { rootUrl } from './index.jsx';
 import { store } from './../store.jsx';
-import { downvotePost } from './../actions/index.jsx';
+import { downvoteComment } from './../actions/index.jsx';
 
 const httpRequest = (downvote) => {
-	const url = rootUrl + 'api/post/downvote';
+	const url = rootUrl + 'api/post/comment/downvote';
 	const data = JSON.stringify(downvote);
 	const request = {
 		headers: {
@@ -15,10 +15,10 @@ const httpRequest = (downvote) => {
 	return fetch(url, request);
 }
 
-export const downvotePostOnServer = (downvote) => {
+export const downvoteCommentOnServer = (downvote) => {
 	return httpRequest(downvote)
 	.then((data) => data.json())
 	.then((data) => {
-		store.dispatch(downvotePost(downvote.postId));
+		store.dispatch(downvoteComment(downvote.commentId));
 	})
 };

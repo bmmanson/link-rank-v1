@@ -1,6 +1,6 @@
 export const upvoteComment = (id) => {
 	return {
-		type: 'UPVOTE_POST',
+		type: 'UPVOTE_COMMENT',
 		id
 	};
 };

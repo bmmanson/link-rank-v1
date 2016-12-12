@@ -1,6 +1,6 @@
 export const downvoteComment = (id) => {
 	return {
-		type: 'DOWNVOTE_POST',
+		type: 'DOWNVOTE_COMMENT',
 		id
 	};
 };
