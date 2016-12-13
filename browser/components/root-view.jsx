@@ -7,12 +7,11 @@ import { Footer } from './footer.jsx';
 import { MoreButton } from './more-button.jsx';
 
 import { getPosts } from './../async/index.jsx';
-import { store } from './../store.jsx';
 
 class Root extends Component {
 
 	componentWillMount() {
-		getPosts(this.props.page);
+		getPosts(this.props.selected);
 	}
 
 	render () {
@@ -25,7 +24,7 @@ class Root extends Component {
 		return (
 			<div>
 				<div style={{marginLeft: 70, marginRight: 70, backgroundColor:'#F7F7F7'}}>
-					<Navbar selected={'MAIN'} />
+					<Navbar selected={this.props.selected} />
 					<Posts posts={this.props.posts} type={'MAIN'} />
 					{displayMoreButton(this.props.moreLinks)}
 					<Footer />
@@ -35,7 +34,7 @@ class Root extends Component {
 	}
 }
 
-const linksPerPage = 20;
+const linksPerPage = 25;
 
 const filterPosts = (posts, page) => {
 	const currentMaxPage = page * linksPerPage;
@@ -54,6 +53,7 @@ const mapStateToProps = (state) => {
 	return {
 		posts: filterPosts(state.posts, state.session.page),
 		moreLinks: displayMoreLinks(state.posts, state.session.page),
+		selected: state.session.selected
 	};
 }
 

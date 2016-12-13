@@ -14,6 +14,7 @@ export const PostStyles = {
 	otherText: {
 		marginTop: 0, 
 		marginBottom: 0,
-		color: '#828282'
+		color: '#828282',
+		fontWeight: '300'
 	}
 };

@@ -1,6 +1,7 @@
 const model = {
 	session: {
-		page: 1
+		page: 1,
+		selected: 'MAIN'
 	}
 };
 

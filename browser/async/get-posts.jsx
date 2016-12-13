@@ -2,20 +2,31 @@ import { store } from './../store.jsx';
 
 import { 
 	addPost, 
-	deleteAllPosts 
+	deleteAllPosts,
+	resetPage,
+	selectMain, 
+	selectNewest
 } from './../actions/index.jsx';
 
 import { rootUrl } from './index.jsx';
 
-const httpRequest = () => {
-	const url = rootUrl + 'api/post/main/';
-	console.log('url in get posts async', url);
+const httpRequest = (type) => {
+	let route;
+	if (type === 'MAIN') {
+		route = 'main';
+		store.dispatch(selectMain());
+	} else if (type === 'NEWEST') {
+		route = 'newest';
+		store.dispatch(selectNewest());
+	}
+	const url = rootUrl + `api/post/${route}/`;
 	return fetch(url, {method: 'GET'});
 }
 
-export const getPosts = () => {
+export const getPosts = (type) => {
 	store.dispatch(deleteAllPosts());
-	return httpRequest()
+	store.dispatch(resetPage());
+	return httpRequest(type)
 	.then((data) => data.json())
 	.then((posts) => {
 		posts.forEach((post) => {

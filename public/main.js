@@ -27972,8 +27972,6 @@
 
 	var _index = __webpack_require__(261);
 
-	var _store = __webpack_require__(263);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27994,7 +27992,7 @@
 		_createClass(Root, [{
 			key: 'componentWillMount',
 			value: function componentWillMount() {
-				(0, _index.getPosts)(this.props.page);
+				(0, _index.getPosts)(this.props.selected);
 			}
 		}, {
 			key: 'render',
@@ -28015,7 +28013,7 @@
 					_react2.default.createElement(
 						'div',
 						{ style: { marginLeft: 70, marginRight: 70, backgroundColor: '#F7F7F7' } },
-						_react2.default.createElement(_navbar.Navbar, { selected: 'MAIN' }),
+						_react2.default.createElement(_navbar.Navbar, { selected: this.props.selected }),
 						_react2.default.createElement(_posts.Posts, { posts: this.props.posts, type: 'MAIN' }),
 						displayMoreButton(this.props.moreLinks),
 						_react2.default.createElement(_footer.Footer, null)
@@ -28027,7 +28025,7 @@
 		return Root;
 	}(_react.Component);
 
-	var linksPerPage = 20;
+	var linksPerPage = 25;
 
 	var filterPosts = function filterPosts(posts, page) {
 		var currentMaxPage = page * linksPerPage;
@@ -28045,7 +28043,8 @@
 	var mapStateToProps = function mapStateToProps(state) {
 		return {
 			posts: filterPosts(state.posts, state.session.page),
-			moreLinks: displayMoreLinks(state.posts, state.session.page)
+			moreLinks: displayMoreLinks(state.posts, state.session.page),
+			selected: state.session.selected
 		};
 	};
 
@@ -28139,6 +28138,10 @@
 
 	var _reactRouter = __webpack_require__(203);
 
+	var _store = __webpack_require__(263);
+
+	var _index = __webpack_require__(261);
+
 	var _navbar = __webpack_require__(259);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -28148,6 +28151,8 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	//import { selectMain, selectNewest } from './../actions/index.jsx';
 
 	var Navbar = function (_Component) {
 		_inherits(Navbar, _Component);
@@ -28161,6 +28166,30 @@
 		_createClass(Navbar, [{
 			key: 'render',
 			value: function render() {
+
+				var mainStyle = {};
+				var newestStyle = {};
+
+				if (this.props.selected === 'MAIN') {
+					mainStyle = {
+						fontWeight: '700',
+						textDecoration: 'underline'
+					};
+				} else if (this.props.selected === 'NEWEST') {
+					newestStyle = {
+						fontWeight: '700',
+						textDecoration: 'underline'
+					};
+				}
+
+				var updatePostsMain = function updatePostsMain() {
+					(0, _index.getPosts)('MAIN');
+				};
+
+				var updatePostsNewest = function updatePostsNewest() {
+					(0, _index.getPosts)('NEWEST');
+				};
+
 				return _react2.default.createElement(
 					'div',
 					{ style: _navbar.NavbarStyles.container },
@@ -28172,11 +28201,17 @@
 							{ style: _navbar.NavbarStyles.leftText },
 							'Link Rank | ',
 							_react2.default.createElement(
-								_reactRouter.Link,
-								{ to: '/' },
+								'span',
+								{ onClick: updatePostsMain, style: mainStyle },
 								'Main'
 							),
-							' | Newest | About | ',
+							' | ',
+							_react2.default.createElement(
+								'span',
+								{ onClick: updatePostsNewest, style: newestStyle },
+								'Newest'
+							),
+							' | About | ',
 							_react2.default.createElement(
 								_reactRouter.Link,
 								{ to: 'submit' },
@@ -28228,7 +28263,8 @@
 			textAlign: 'left',
 			marginLeft: 6,
 			marginTop: 4,
-			marginBottom: 4
+			marginBottom: 4,
+			fontWeight: '300'
 		},
 		rightText: {
 			color: 'white',
@@ -28525,15 +28561,23 @@
 
 	var _index2 = __webpack_require__(261);
 
-	var httpRequest = function httpRequest() {
-		var url = _index2.rootUrl + 'api/post/main/';
-		console.log('url in get posts async', url);
+	var httpRequest = function httpRequest(type) {
+		var route = void 0;
+		if (type === 'MAIN') {
+			route = 'main';
+			_store.store.dispatch((0, _index.selectMain)());
+		} else if (type === 'NEWEST') {
+			route = 'newest';
+			_store.store.dispatch((0, _index.selectNewest)());
+		}
+		var url = _index2.rootUrl + ('api/post/' + route + '/');
 		return fetch(url, { method: 'GET' });
 	};
 
-	var getPosts = exports.getPosts = function getPosts() {
+	var getPosts = exports.getPosts = function getPosts(type) {
 		_store.store.dispatch((0, _index.deleteAllPosts)());
-		return httpRequest().then(function (data) {
+		_store.store.dispatch((0, _index.resetPage)());
+		return httpRequest(type).then(function (data) {
 			return data.json();
 		}).then(function (posts) {
 			posts.forEach(function (post) {
@@ -28603,14 +28647,15 @@
 /* 265 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 	var model = {
 		session: {
-			page: 1
+			page: 1,
+			selected: 'MAIN'
 		}
 	};
 
@@ -28788,6 +28833,18 @@
 	      return Object.assign({}, state, {
 	        page: state.page + 1
 	      });
+	    case 'RESET_PAGE':
+	      return Object.assign({}, state, {
+	        page: 1
+	      });
+	    case 'SELECT_MAIN':
+	      return Object.assign({}, state, {
+	        selected: 'MAIN'
+	      });
+	    case 'SELECT_NEWEST':
+	      return Object.assign({}, state, {
+	        selected: 'NEWEST'
+	      });
 	    default:
 	      return state;
 	  }
@@ -28802,7 +28859,7 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.nextPage = exports.downvoteComment = exports.upvoteComment = exports.deleteAllComments = exports.deleteAllPosts = exports.downvotePost = exports.upvotePost = exports.addComment = exports.addPost = undefined;
+	exports.resetPage = exports.selectMain = exports.selectNewest = exports.nextPage = exports.downvoteComment = exports.upvoteComment = exports.deleteAllComments = exports.deleteAllPosts = exports.downvotePost = exports.upvotePost = exports.addComment = exports.addPost = undefined;
 
 	var _addPost = __webpack_require__(271);
 
@@ -28822,6 +28879,12 @@
 
 	var _nextPage = __webpack_require__(279);
 
+	var _selectNewest = __webpack_require__(410);
+
+	var _selectMain = __webpack_require__(411);
+
+	var _resetPage = __webpack_require__(412);
+
 	exports.addPost = _addPost.addPost;
 	exports.addComment = _addComment.addComment;
 	exports.upvotePost = _upvotePost.upvotePost;
@@ -28831,6 +28894,9 @@
 	exports.upvoteComment = _upvoteComment.upvoteComment;
 	exports.downvoteComment = _downvoteComment.downvoteComment;
 	exports.nextPage = _nextPage.nextPage;
+	exports.selectNewest = _selectNewest.selectNewest;
+	exports.selectMain = _selectMain.selectMain;
+	exports.resetPage = _resetPage.resetPage;
 
 /***/ },
 /* 271 */
@@ -29874,7 +29940,8 @@
 		otherText: {
 			marginTop: 0,
 			marginBottom: 0,
-			color: '#828282'
+			color: '#828282',
+			fontWeight: '300'
 		}
 	};
 
@@ -45405,6 +45472,51 @@
 	}(_react.Component);
 
 	exports.MoreButton = MoreButton;
+
+/***/ },
+/* 410 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var selectNewest = exports.selectNewest = function selectNewest() {
+		return {
+			type: 'SELECT_NEWEST'
+		};
+	};
+
+/***/ },
+/* 411 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var selectMain = exports.selectMain = function selectMain() {
+		return {
+			type: 'SELECT_MAIN'
+		};
+	};
+
+/***/ },
+/* 412 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var resetPage = exports.resetPage = function resetPage() {
+		return {
+			type: 'RESET_PAGE'
+		};
+	};
 
 /***/ }
 /******/ ]);

@@ -15,7 +15,8 @@ export const NavbarStyles = {
 		textAlign: 'left',
 		marginLeft: 6,
 		marginTop: 4,
-		marginBottom: 4
+		marginBottom: 4,
+		fontWeight: '300'
 	},
 	rightText: {
 		color: 'white', 
