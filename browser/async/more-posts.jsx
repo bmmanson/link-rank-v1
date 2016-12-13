@@ -10,7 +10,6 @@ import { rootUrl } from './index.jsx';
 
 const httpRequest = () => {
 	const url = rootUrl + 'api/post/main/';
-	console.log('url in get posts async', url);
 	return fetch(url, {method: 'GET'});
 }
 

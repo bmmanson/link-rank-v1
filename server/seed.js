@@ -302,5 +302,5 @@ db.sync({force: true})
   console.log("Finished inserting data (press ctrl-c to exit)");
 })
 .catch(function (err) {
-  console.error('There was totally a problem', err, err.stack);
+  console.error('Error:', err, err.stack);
 });

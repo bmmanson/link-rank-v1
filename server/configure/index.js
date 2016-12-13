@@ -12,5 +12,5 @@ module.exports = function (app, db) {
 	require('./app-variables')(app);
 	require('./static-middleware')(app);
 	require('./parsing-middleware')(app);
-	//require('./authentication')(app, db);
+	require('./authentication')(app, db);
 }

@@ -54,7 +54,7 @@ class Navbar extends Component {
 				</div>
 				<div style={NavbarStyles.half}>
 					<h5 style={NavbarStyles.rightText}>
-							Login
+							<Link to={'login'}>Login</Link>
 					</h5>
 				</div>
 			</div>
