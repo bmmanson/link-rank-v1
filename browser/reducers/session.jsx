@@ -16,6 +16,10 @@ export const session = (state = [], action) => {
       return Object.assign({}, state, {
       	selected: 'NEWEST'
       });
+    case 'SELECT_SUBMIT':
+      return Object.assign({}, state, {
+        selected: 'SUBMIT'
+      });
     default:
       return state;
   }

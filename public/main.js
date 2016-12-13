@@ -27970,6 +27970,8 @@
 
 	var _moreButton = __webpack_require__(409);
 
+	var _submitForms = __webpack_require__(260);
+
 	var _index = __webpack_require__(261);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -28007,6 +28009,24 @@
 					);
 				};
 
+				var displayPosts = function displayPosts(selected) {
+					if (selected === 'MAIN' || selected === 'NEWEST') {
+						return _react2.default.createElement(
+							'div',
+							null,
+							_react2.default.createElement(_posts.Posts, { posts: _this2.props.posts, type: 'MAIN' }),
+							displayMoreButton(_this2.props.moreLinks),
+							_react2.default.createElement(_footer.Footer, null)
+						);
+					}
+				};
+
+				var displaySubmitForms = function displaySubmitForms(selected) {
+					if (selected === 'SUBMIT') {
+						return _react2.default.createElement(_submitForms.SubmitForms, null);
+					}
+				};
+
 				return _react2.default.createElement(
 					'div',
 					null,
@@ -28014,9 +28034,8 @@
 						'div',
 						{ style: { marginLeft: 70, marginRight: 70, backgroundColor: '#F7F7F7' } },
 						_react2.default.createElement(_navbar.Navbar, { selected: this.props.selected }),
-						_react2.default.createElement(_posts.Posts, { posts: this.props.posts, type: 'MAIN' }),
-						displayMoreButton(this.props.moreLinks),
-						_react2.default.createElement(_footer.Footer, null)
+						displayPosts(this.props.selected),
+						displaySubmitForms(this.props.selected)
 					)
 				);
 			}
@@ -28140,7 +28159,9 @@
 
 	var _store = __webpack_require__(263);
 
-	var _index = __webpack_require__(261);
+	var _index = __webpack_require__(270);
+
+	var _index2 = __webpack_require__(261);
 
 	var _navbar = __webpack_require__(259);
 
@@ -28151,8 +28172,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	//import { selectMain, selectNewest } from './../actions/index.jsx';
 
 	var Navbar = function (_Component) {
 		_inherits(Navbar, _Component);
@@ -28169,6 +28188,7 @@
 
 				var mainStyle = {};
 				var newestStyle = {};
+				var submitStyle = {};
 
 				if (this.props.selected === 'MAIN') {
 					mainStyle = {
@@ -28180,14 +28200,23 @@
 						fontWeight: '700',
 						textDecoration: 'underline'
 					};
+				} else if (this.props.selected === 'SUBMIT') {
+					submitStyle = {
+						fontWeight: '700',
+						textDecoration: 'underline'
+					};
 				}
 
 				var updatePostsMain = function updatePostsMain() {
-					(0, _index.getPosts)('MAIN');
+					(0, _index2.getPosts)('MAIN');
 				};
 
 				var updatePostsNewest = function updatePostsNewest() {
-					(0, _index.getPosts)('NEWEST');
+					(0, _index2.getPosts)('NEWEST');
+				};
+
+				var updateSubmit = function updateSubmit() {
+					_store.store.dispatch((0, _index.selectSubmit)());
 				};
 
 				return _react2.default.createElement(
@@ -28213,8 +28242,8 @@
 							),
 							' | About | ',
 							_react2.default.createElement(
-								_reactRouter.Link,
-								{ to: 'submit' },
+								'span',
+								{ onClick: updateSubmit, style: submitStyle },
 								'Submit'
 							)
 						)
@@ -28845,6 +28874,10 @@
 	      return Object.assign({}, state, {
 	        selected: 'NEWEST'
 	      });
+	    case 'SELECT_SUBMIT':
+	      return Object.assign({}, state, {
+	        selected: 'SUBMIT'
+	      });
 	    default:
 	      return state;
 	  }
@@ -28859,7 +28892,7 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.resetPage = exports.selectMain = exports.selectNewest = exports.nextPage = exports.downvoteComment = exports.upvoteComment = exports.deleteAllComments = exports.deleteAllPosts = exports.downvotePost = exports.upvotePost = exports.addComment = exports.addPost = undefined;
+	exports.selectSubmit = exports.resetPage = exports.selectMain = exports.selectNewest = exports.nextPage = exports.downvoteComment = exports.upvoteComment = exports.deleteAllComments = exports.deleteAllPosts = exports.downvotePost = exports.upvotePost = exports.addComment = exports.addPost = undefined;
 
 	var _addPost = __webpack_require__(271);
 
@@ -28877,13 +28910,15 @@
 
 	var _downvoteComment = __webpack_require__(278);
 
+	var _resetPage = __webpack_require__(412);
+
 	var _nextPage = __webpack_require__(279);
 
 	var _selectNewest = __webpack_require__(410);
 
 	var _selectMain = __webpack_require__(411);
 
-	var _resetPage = __webpack_require__(412);
+	var _selectSubmit = __webpack_require__(413);
 
 	exports.addPost = _addPost.addPost;
 	exports.addComment = _addComment.addComment;
@@ -28897,6 +28932,7 @@
 	exports.selectNewest = _selectNewest.selectNewest;
 	exports.selectMain = _selectMain.selectMain;
 	exports.resetPage = _resetPage.resetPage;
+	exports.selectSubmit = _selectSubmit.selectSubmit;
 
 /***/ },
 /* 271 */
@@ -45515,6 +45551,21 @@
 	var resetPage = exports.resetPage = function resetPage() {
 		return {
 			type: 'RESET_PAGE'
+		};
+	};
+
+/***/ },
+/* 413 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var selectSubmit = exports.selectSubmit = function selectSubmit() {
+		return {
+			type: 'SELECT_SUBMIT'
 		};
 	};
 

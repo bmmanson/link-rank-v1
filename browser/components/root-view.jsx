@@ -5,6 +5,7 @@ import { Navbar } from './navbar.jsx';
 import { Posts } from './posts.jsx';
 import { Footer } from './footer.jsx';
 import { MoreButton } from './more-button.jsx';
+import { SubmitForms } from './submit-forms.jsx';
 
 import { getPosts } from './../async/index.jsx';
 
@@ -21,13 +22,32 @@ class Root extends Component {
 			else return (<p> </p>);
 		}
 
+		const displayPosts = (selected) => {
+			if (selected === 'MAIN' || selected === 'NEWEST') {
+				return (
+					<div>
+					<Posts posts={this.props.posts} type={'MAIN'} />
+					{displayMoreButton(this.props.moreLinks)}
+					<Footer />
+					</div>
+				);
+			}
+		}
+
+		const displaySubmitForms = (selected) => {
+			if (selected === 'SUBMIT') {
+				return (
+					<SubmitForms />
+				);
+			}
+		}
+
 		return (
 			<div>
 				<div style={{marginLeft: 70, marginRight: 70, backgroundColor:'#F7F7F7'}}>
 					<Navbar selected={this.props.selected} />
-					<Posts posts={this.props.posts} type={'MAIN'} />
-					{displayMoreButton(this.props.moreLinks)}
-					<Footer />
+					{displayPosts(this.props.selected)}
+					{displaySubmitForms(this.props.selected)}
 				</div>
 			</div>
 		);

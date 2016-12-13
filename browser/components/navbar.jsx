@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 import { store } from './../store.jsx';
 
-//import { selectMain, selectNewest } from './../actions/index.jsx';
+import { selectSubmit } from './../actions/index.jsx';
 
 import { getPosts } from './../async/index.jsx';
 
@@ -14,6 +14,7 @@ class Navbar extends Component {
 
 		let mainStyle = {};
 		let newestStyle = {};
+		let submitStyle = {};
 
 		if (this.props.selected === 'MAIN') {
 			mainStyle = {
@@ -22,6 +23,11 @@ class Navbar extends Component {
 			};		
 		} else if (this.props.selected === 'NEWEST') {
 			newestStyle = {
+				fontWeight: '700',
+				textDecoration: 'underline'
+			};
+		} else if (this.props.selected === 'SUBMIT') {
+			submitStyle = {
 				fontWeight: '700',
 				textDecoration: 'underline'
 			};
@@ -35,11 +41,15 @@ class Navbar extends Component {
 			getPosts('NEWEST');
 		}
 
+		const updateSubmit = () => {
+			store.dispatch(selectSubmit());
+		}
+
 		return (
 			<div style={NavbarStyles.container}>
 				<div style={NavbarStyles.half}>
 					<h5 style={NavbarStyles.leftText}>
-							Link Rank | <span onClick={updatePostsMain} style={mainStyle}>Main</span> | <span onClick={updatePostsNewest} style={newestStyle}>Newest</span> | About | <Link to={'submit'}>Submit</Link>
+							Link Rank | <span onClick={updatePostsMain} style={mainStyle}>Main</span> | <span onClick={updatePostsNewest} style={newestStyle}>Newest</span> | About | <span onClick={updateSubmit} style={submitStyle}>Submit</span>
 					</h5>
 				</div>
 				<div style={NavbarStyles.half}>
