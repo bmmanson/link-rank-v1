@@ -56,7 +56,6 @@ router.get('/main', function (req, res, next) {
 });
 
 router.get('/newest', function (req, res, next) {
-	console.log('newest');
 	Post.findAll({
 		include:[
 			{

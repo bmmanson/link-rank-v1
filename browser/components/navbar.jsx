@@ -12,25 +12,25 @@ import {NavbarStyles} from './../styles/navbar.jsx';
 class Navbar extends Component {
 	render () {
 
-		let mainStyle = {};
-		let newestStyle = {};
-		let submitStyle = {};
+		let mainStyle = {color: 'white', textDecoration: 'none'};
+		let newestStyle = {color: 'white', textDecoration: 'none'};
+		let submitStyle = {color: 'white', textDecoration: 'none'};
 
 		if (this.props.selected === 'MAIN') {
-			mainStyle = {
+			mainStyle = Object.assign({}, mainStyle, {
 				fontWeight: '700',
 				textDecoration: 'underline'
-			};		
+			});		
 		} else if (this.props.selected === 'NEWEST') {
-			newestStyle = {
+			newestStyle = Object.assign({}, newestStyle, {
 				fontWeight: '700',
 				textDecoration: 'underline'
-			};
+			});
 		} else if (this.props.selected === 'SUBMIT') {
-			submitStyle = {
+			submitStyle = Object.assign({}, submitStyle, {
 				fontWeight: '700',
-				textDecoration: 'underline'
-			};
+				textDecoration: 'underline',
+			});
 		}
 
 		const updatePostsMain = () => {
@@ -49,7 +49,7 @@ class Navbar extends Component {
 			<div style={NavbarStyles.container}>
 				<div style={NavbarStyles.half}>
 					<h5 style={NavbarStyles.leftText}>
-							Link Rank | <span onClick={updatePostsMain} style={mainStyle}>Main</span> | <span onClick={updatePostsNewest} style={newestStyle}>Newest</span> | About | <span onClick={updateSubmit} style={submitStyle}>Submit</span>
+							Link Rank | <Link to={'/'} onClick={updatePostsMain} style={mainStyle}>Main</Link> | <Link to={'/'} onClick={updatePostsNewest} style={newestStyle}>Newest</Link> | About | <Link to={'submit'} style={submitStyle}>Submit</Link>
 					</h5>
 				</div>
 				<div style={NavbarStyles.half}>

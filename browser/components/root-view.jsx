@@ -22,32 +22,13 @@ class Root extends Component {
 			else return (<p> </p>);
 		}
 
-		const displayPosts = (selected) => {
-			if (selected === 'MAIN' || selected === 'NEWEST') {
-				return (
-					<div>
-					<Posts posts={this.props.posts} type={'MAIN'} />
-					{displayMoreButton(this.props.moreLinks)}
-					<Footer />
-					</div>
-				);
-			}
-		}
-
-		const displaySubmitForms = (selected) => {
-			if (selected === 'SUBMIT') {
-				return (
-					<SubmitForms />
-				);
-			}
-		}
-
 		return (
 			<div>
 				<div style={{marginLeft: 70, marginRight: 70, backgroundColor:'#F7F7F7'}}>
 					<Navbar selected={this.props.selected} />
-					{displayPosts(this.props.selected)}
-					{displaySubmitForms(this.props.selected)}
+					<Posts posts={this.props.posts} type={'MAIN'} />
+					{displayMoreButton(this.props.moreLinks)}
+					<Footer />
 				</div>
 			</div>
 		);

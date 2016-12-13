@@ -28009,24 +28009,6 @@
 					);
 				};
 
-				var displayPosts = function displayPosts(selected) {
-					if (selected === 'MAIN' || selected === 'NEWEST') {
-						return _react2.default.createElement(
-							'div',
-							null,
-							_react2.default.createElement(_posts.Posts, { posts: _this2.props.posts, type: 'MAIN' }),
-							displayMoreButton(_this2.props.moreLinks),
-							_react2.default.createElement(_footer.Footer, null)
-						);
-					}
-				};
-
-				var displaySubmitForms = function displaySubmitForms(selected) {
-					if (selected === 'SUBMIT') {
-						return _react2.default.createElement(_submitForms.SubmitForms, null);
-					}
-				};
-
 				return _react2.default.createElement(
 					'div',
 					null,
@@ -28034,8 +28016,9 @@
 						'div',
 						{ style: { marginLeft: 70, marginRight: 70, backgroundColor: '#F7F7F7' } },
 						_react2.default.createElement(_navbar.Navbar, { selected: this.props.selected }),
-						displayPosts(this.props.selected),
-						displaySubmitForms(this.props.selected)
+						_react2.default.createElement(_posts.Posts, { posts: this.props.posts, type: 'MAIN' }),
+						displayMoreButton(this.props.moreLinks),
+						_react2.default.createElement(_footer.Footer, null)
 					)
 				);
 			}
@@ -28186,25 +28169,25 @@
 			key: 'render',
 			value: function render() {
 
-				var mainStyle = {};
-				var newestStyle = {};
-				var submitStyle = {};
+				var mainStyle = { color: 'white', textDecoration: 'none' };
+				var newestStyle = { color: 'white', textDecoration: 'none' };
+				var submitStyle = { color: 'white', textDecoration: 'none' };
 
 				if (this.props.selected === 'MAIN') {
-					mainStyle = {
+					mainStyle = Object.assign({}, mainStyle, {
 						fontWeight: '700',
 						textDecoration: 'underline'
-					};
+					});
 				} else if (this.props.selected === 'NEWEST') {
-					newestStyle = {
+					newestStyle = Object.assign({}, newestStyle, {
 						fontWeight: '700',
 						textDecoration: 'underline'
-					};
+					});
 				} else if (this.props.selected === 'SUBMIT') {
-					submitStyle = {
+					submitStyle = Object.assign({}, submitStyle, {
 						fontWeight: '700',
 						textDecoration: 'underline'
-					};
+					});
 				}
 
 				var updatePostsMain = function updatePostsMain() {
@@ -28230,20 +28213,20 @@
 							{ style: _navbar.NavbarStyles.leftText },
 							'Link Rank | ',
 							_react2.default.createElement(
-								'span',
-								{ onClick: updatePostsMain, style: mainStyle },
+								_reactRouter.Link,
+								{ to: '/', onClick: updatePostsMain, style: mainStyle },
 								'Main'
 							),
 							' | ',
 							_react2.default.createElement(
-								'span',
-								{ onClick: updatePostsNewest, style: newestStyle },
+								_reactRouter.Link,
+								{ to: '/', onClick: updatePostsNewest, style: newestStyle },
 								'Newest'
 							),
 							' | About | ',
 							_react2.default.createElement(
-								'span',
-								{ onClick: updateSubmit, style: submitStyle },
+								_reactRouter.Link,
+								{ to: 'submit', style: submitStyle },
 								'Submit'
 							)
 						)
