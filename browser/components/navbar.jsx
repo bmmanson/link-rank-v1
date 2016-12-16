@@ -15,18 +15,17 @@ class Navbar extends Component {
 		let mainStyle = {color: 'white', textDecoration: 'none'};
 		let newestStyle = {color: 'white', textDecoration: 'none'};
 		let submitStyle = {color: 'white', textDecoration: 'none'};
-
-		if (this.props.selected === 'MAIN') {
+		if (this.props.session.selected === 'MAIN') {
 			mainStyle = Object.assign({}, mainStyle, {
 				fontWeight: '700',
 				textDecoration: 'underline'
 			});		
-		} else if (this.props.selected === 'NEWEST') {
+		} else if (this.props.session.selected === 'NEWEST') {
 			newestStyle = Object.assign({}, newestStyle, {
 				fontWeight: '700',
 				textDecoration: 'underline'
 			});
-		} else if (this.props.selected === 'SUBMIT') {
+		} else if (this.props.session.selected === 'SUBMIT') {
 			submitStyle = Object.assign({}, submitStyle, {
 				fontWeight: '700',
 				textDecoration: 'underline',
@@ -45,17 +44,31 @@ class Navbar extends Component {
 			store.dispatch(selectSubmit());
 		}
 
+		const displayLogin = (loggedIn) => {
+			if (loggedIn) {
+				return (
+					<h5 style={NavbarStyles.rightText}>
+							Logout
+					</h5>
+				);
+			} else {
+				return (
+					<h5 style={NavbarStyles.rightText}>
+							<Link to={'login'}>Login</Link>
+					</h5>
+				);
+			}
+		}
+
 		return (
 			<div style={NavbarStyles.container}>
 				<div style={NavbarStyles.half}>
 					<h5 style={NavbarStyles.leftText}>
-							Link Rank | <Link to={'/'} onClick={updatePostsMain} style={mainStyle}>Main</Link> | <Link to={'/'} onClick={updatePostsNewest} style={newestStyle}>Newest</Link> | About | <Link to={'submit'} style={submitStyle}>Submit</Link>
+							Link Rank | <Link to={'/'} onClick={updatePostsMain} style={mainStyle}>Main</Link> | <Link to={'/'} onClick={updatePostsNewest} style={newestStyle}>Newest</Link> | About | <Link to={'submit'} onClick={updateSubmit} style={submitStyle}>Submit</Link>
 					</h5>
 				</div>
 				<div style={NavbarStyles.half}>
-					<h5 style={NavbarStyles.rightText}>
-							<Link to={'login'}>Login</Link>
-					</h5>
+					{displayLogin(this.props.session.loggedIn)}
 				</div>
 			</div>
 		);

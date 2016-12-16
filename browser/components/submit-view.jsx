@@ -10,7 +10,7 @@ class Submit extends Component {
 		return (
 			<div>
 				<div style={{marginLeft: 70, marginRight: 70}}>
-					<Navbar selected={'SUBMIT'} />
+					<Navbar session={this.props.session} />
 					<SubmitForms />
 				</div>
 			</div>
@@ -20,12 +20,12 @@ class Submit extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		
+		session: state.session
 	};
 }
 
 const SubmitView = connect(
-	
+	mapStateToProps
 )(Submit);
 
 export { SubmitView };

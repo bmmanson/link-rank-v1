@@ -12,7 +12,7 @@ import { getPosts } from './../async/index.jsx';
 class Root extends Component {
 
 	componentWillMount() {
-		getPosts(this.props.selected);
+		getPosts(this.props.session.selected);
 	}
 
 	render () {
@@ -25,7 +25,7 @@ class Root extends Component {
 		return (
 			<div>
 				<div style={{marginLeft: 70, marginRight: 70, backgroundColor:'#F7F7F7'}}>
-					<Navbar selected={this.props.selected} />
+					<Navbar session={this.props.session} />
 					<Posts posts={this.props.posts} type={'MAIN'} />
 					{displayMoreButton(this.props.moreLinks)}
 					<Footer />
@@ -54,7 +54,7 @@ const mapStateToProps = (state) => {
 	return {
 		posts: filterPosts(state.posts, state.session.page),
 		moreLinks: displayMoreLinks(state.posts, state.session.page),
-		selected: state.session.selected
+		session: state.session
 	};
 }
 

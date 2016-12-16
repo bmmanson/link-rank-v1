@@ -6,16 +6,18 @@ var data = {
 		{
 			name: 'benny',
 			facebookId: 'a',
+			password: 'abc'
 		},
 		{
 			name: 'bex',
 			facebookId: 'b',
+			password: 'abc'
 		},
 		{
 			name: 'gus',
-			facebookId: 'c'
+			facebookId: 'c',
+			password: 'abc'
 		}
-
 	],
 	post: [
 		{

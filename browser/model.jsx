@@ -1,7 +1,8 @@
 const model = {
 	session: {
 		page: 1,
-		selected: 'MAIN'
+		selected: 'MAIN',
+		loggedIn: false
 	}
 };
 

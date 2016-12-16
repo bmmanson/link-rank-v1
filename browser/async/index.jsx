@@ -7,7 +7,8 @@ import { upvotePostOnServer } from './upvote-post.jsx';
 import { downvotePostOnServer } from './downvote-post.jsx';
 import { upvoteCommentOnServer } from './upvote-comment.jsx';
 import { downvoteCommentOnServer } from './downvote-comment.jsx';
-import { loginFb } from './login-fb.jsx'; 
+import { sendAccessToken } from './send-access-token.jsx'; 
+import { loginServer } from './login.jsx';
 
 export const rootUrl = 'http://localhost:1337/';
 
@@ -21,5 +22,6 @@ export {
 	upvoteCommentOnServer,
 	downvoteCommentOnServer,
 	morePosts,
-	loginFb
+	sendAccessToken,
+	loginServer
 };

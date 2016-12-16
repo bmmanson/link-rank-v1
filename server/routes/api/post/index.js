@@ -8,6 +8,9 @@ var router = express.Router();
 router.use('/comment', require('./comment.js'));
 
 router.get('/main', function (req, res, next) {
+	console.log('main, req.user', req.user);
+	console.log('main, req.session', req.session);
+	console.log('cookie, req.cookie', req.cookie);
 	Post.findAll({
 		include:[
 			{

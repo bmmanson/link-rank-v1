@@ -15,6 +15,9 @@ import {selectNewest} from './session/select-newest.jsx';
 import {selectMain} from './session/select-main.jsx';
 import {selectSubmit} from './session/select-submit.jsx';
 
+import {login} from './session/login.jsx';
+import {logout} from './session/logout.jsx';
+
 export {
 	addPost,
 	addComment,
@@ -28,5 +31,7 @@ export {
 	selectNewest,
 	selectMain,
 	resetPage,
-	selectSubmit
+	selectSubmit,
+	login,
+	logout
 };

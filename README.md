@@ -1,1 +1,1 @@
-a site for sharing links, inspired by Reddit, Hacker News and Twitter, built with from scratch with React, Node and SQL
+a site for sharing links, inspired by Reddit, Hacker News and Twitter, built with React, Node and SQL

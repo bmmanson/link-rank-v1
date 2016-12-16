@@ -20,6 +20,14 @@ export const session = (state = [], action) => {
       return Object.assign({}, state, {
         selected: 'SUBMIT'
       });
+    case 'LOGIN':
+      return Object.assign({}, state, {
+        loggedIn: true
+      });
+    case 'LOGOUT':
+      return Object.assign({}, state, {
+        loggedIn: false
+      });
     default:
       return state;
   }

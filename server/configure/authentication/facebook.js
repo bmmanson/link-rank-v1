@@ -1,6 +1,6 @@
 'use strict';
 var passport = require('passport');
-var FacebookStrategy = require('passport-facebook');
+var FacebookStrategyToken = require('passport-facebook-token');
 var env = require('./../../env');
 
 module.exports = function (app, db) {
@@ -10,7 +10,7 @@ module.exports = function (app, db) {
 	var credentials = {
 		clientID: env.FACEBOOK_APP_ID,
 		clientSecret: env.FACEBOOK_SECRET,
-		profileFields: ['id', 'displayName', 'photos', 'emails', 'gender'],
+		profileFields: ['emails', 'displayName'],
 	};
 
 	var verifyCallback = function(accessToken, refreshToken, profile, done) {
@@ -25,12 +25,14 @@ module.exports = function (app, db) {
 				console.log("creating new user");
 				return User.create({ 
 	   				facebookId: profile.id,
+	   				name: profile.displayName
 	    		});
 			} else {
 				return user;
 			}
 		})
 	    .then(function (userToLogin) {
+	    	console.log('user to login');
 	    	done(null, userToLogin);
 	    })
 	    .catch(function (err) {
@@ -38,15 +40,17 @@ module.exports = function (app, db) {
 	    });
 	}
 
-	passport.use(new FacebookStrategy(credentials, verifyCallback));
+	passport.use(new FacebookStrategyToken(credentials, verifyCallback));
 
-	app.get('/auth/facebook', passport.authenticate('facebook', {scope: ['email']}));
+	app.post('/auth/facebook/token', 
+	passport.authenticate('facebook-token'),
+	function(req, res) {
+		var response = {
+			userId: req.user.id,
+			facebookId: req.user.facebookId
+		}
 
-    app.get('/auth/facebook/callback',
-        passport.authenticate('facebook', {failureRedirect: '/login'}),
-        function (req, res) {
-            res.redirect('/');
-    	}
-    );
+		res.json(response);
+	});
 
 }

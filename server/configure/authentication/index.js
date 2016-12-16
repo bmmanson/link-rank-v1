@@ -14,26 +14,32 @@ module.exports = function(app, db) {
     var User = db.model('user'); 
 
 	app.use(session({
-		secret: 'keyboard cat',
+		secret: 'so secret',
 		store: dbStore,
 		resave: false,
-		saveUninitialized: false
+		saveUninitialized: false,
+		cookie: {
+			secure: false
+		}
 	}));
+
 	app.use(passport.initialize());
 	app.use(passport.session());
 
-	passport.serializeUser(function(user, done) {
-	  done(null, user.id);
+	passport.serializeUser(function (user, done) {
+		console.log('serialize user');
+		done(null, user.id);
 	});
 
 	passport.deserializeUser(function(id, done) {
+	  console.log('deserialize');
+	  done(null, id);
 	  User.findById(id)
 	  .then(function (user) {
-	    done(null, user);
-	  })
-	  .catch(function (err) {
+	  	done(null, user);
+	  }).catch(function (err) {
 	  	done(err);
-	  })
+	  });
 	});
 
 	app.get('/session', function (req, res) {
@@ -45,10 +51,11 @@ module.exports = function(app, db) {
     });
 
     app.get('/logout', function (req, res) {
+    	console.log('logout hit');
         req.logout();
         res.status(200).end();
     });
 
-	require(path.join(__dirname, 'facebook'))(app, db);
+	require(path.join(__dirname, 'local'))(app, db);
 
 }

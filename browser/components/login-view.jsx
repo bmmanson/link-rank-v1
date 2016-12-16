@@ -10,7 +10,7 @@ class Login extends Component {
 		return (
 			<div>
 				<div style={{marginLeft: 70, marginRight: 70}}>
-					<Navbar selected={'SUBMIT'} />
+					<Navbar session={this.props.session} />
 					<LoginForms />
 				</div>
 			</div>
@@ -20,12 +20,12 @@ class Login extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		
+		session: state.session
 	};
 }
 
 const LoginView = connect(
-	
+	mapStateToProps
 )(Login);
 
 export { LoginView };
