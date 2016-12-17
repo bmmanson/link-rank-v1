@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 
 import { Navbar } from './navbar.jsx';
-import { FacebookLoginButton } from './facebook-login-button.jsx';
 
 import { loginServer } from './../async/index.jsx';
 
@@ -14,7 +13,6 @@ class LoginForms extends Component {
 		this.state = {
 			username: '',
 			password: '',
-			passwordDisplay: '',
 			newUsername: '',
 			newPassword: ''
 		};
@@ -42,6 +40,7 @@ class LoginForms extends Component {
 				<div>
 					<p style={{margin: 0, marginLeft: 6, fontSize: 12}}>password:</p>
 					<input style={{width: 200, marginTop: 0, marginBottom: 10, marginLeft: 6, fontSize: 14, height: 16}}
+						type="password"
 						value={this.state.password}
 						onChange={(event) => this.setState({password: event.target.value})}/>
 				</div>
@@ -57,6 +56,7 @@ class LoginForms extends Component {
 				<div>
 					<input style={{width: 200, marginTop: 0, marginBottom: 10, marginLeft: 6, fontSize: 14, height: 16}}
 						value={this.state.newPassword}
+						type="password"
 						onChange={(event) => this.setState({newPassword: event.target.value})}/>
 				</div>
 				<button style={{marginLeft: 6}}>create account</button>

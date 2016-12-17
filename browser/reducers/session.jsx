@@ -32,6 +32,10 @@ export const session = (state = [], action) => {
         name: null,
         score: 0
       });
+    case 'INIT_OFF':
+      return Object.assign({}, state, {
+        init: false
+      });
     default:
       return state;
   }

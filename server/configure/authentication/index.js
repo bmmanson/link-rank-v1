@@ -36,7 +36,7 @@ module.exports = function(app, db) {
 	  });
 	});
 
-	app.get('/session', function (req, res) {
+	app.get('/auth/session', function (req, res) {
         if (req.user) {
         	//removed req.user.sanitize()
             res.send({ user: req.user });

@@ -5,7 +5,7 @@ import { store } from './../store.jsx';
 
 import { selectSubmit } from './../actions/index.jsx';
 
-import { getPosts, logoutServer } from './../async/index.jsx';
+import { getPosts, logoutServer, getLoggedIn } from './../async/index.jsx';
 
 import {NavbarStyles} from './../styles/navbar.jsx';
 
@@ -30,6 +30,10 @@ class Navbar extends Component {
 				fontWeight: '700',
 				textDecoration: 'underline',
 			});
+		}
+
+		if (this.props.session.init) {
+			getLoggedIn();
 		}
 
 		const updatePostsMain = () => {

@@ -125,16 +125,18 @@ class Post extends Component {
 			toggleDownvote();
 		}
 
-		const displayVoteButton = (voted) => {
-			if (voted) {
+		const displayVoteButton = (voted, session) => {
+			if (voted || !session.loggedIn) {
 				return (<h3 style={{fontFamily: 'Oxygen', fontSize: 10, marginTop: 5, marginLeft: 2, textAlign: 'center'}}> </h3>);
 			} else {
 				return (<h3 onClick={upvote} style={{fontFamily: 'Oxygen', fontSize: 10, marginTop: 5, marginLeft: 2, textAlign: 'center'}}>▲</h3>);
 			}
 		}
 
-		const displayDownvoteButton = (voted) => {
-			if (voted) {
+		const displayDownvoteButton = (voted, session) => {
+			if (!session.loggedIn) {
+				return (<span></span>);
+			} else if (voted) {
 				return (<span><span style={downvoteStyle} onClick={downvote} onMouseEnter={toggleDownvote} onMouseLeave={toggleDownvote}>unvote</span> |</span>);
 			} else {
 				return (<span></span>);
@@ -147,7 +149,7 @@ class Post extends Component {
 					{formattedRank(this.props.type, this.props.num)}					
 				</div>
 				<div style={{float: 'left', width: 10}}>
-					{displayVoteButton(this.props.post.voted)}
+					{displayVoteButton(this.props.post.voted, this.props.session)}
 				</div>
 				<div style={PostStyles.container}>
 						<h5 style={PostStyles.linkText}>
@@ -157,7 +159,7 @@ class Post extends Component {
 							</a>
 						</h5>
 						<h6 style={PostStyles.otherText}>
-							{formattedScore(this.props.post.score)} by <a href={'/'} onMouseEnter={toggleUser} onMouseLeave={toggleUser} style={userStyle}>{this.props.post.author}</a> {formattedTime(this.props.post.date)} | <span style={hideStyle} onMouseEnter={toggleHide} onMouseLeave={toggleHide}>hide</span> | {displayDownvoteButton(this.props.post.voted)} <Link to={`/item/${this.props.post.id}`} onMouseEnter={toggleComment} onMouseLeave={toggleComment} style={commentsStyle}>{displayComments(this.props.post.comments)}</Link>
+							{formattedScore(this.props.post.score)} by <a href={'/'} onMouseEnter={toggleUser} onMouseLeave={toggleUser} style={userStyle}>{this.props.post.author}</a> {formattedTime(this.props.post.date)} | <span style={hideStyle} onMouseEnter={toggleHide} onMouseLeave={toggleHide}>hide</span> | {displayDownvoteButton(this.props.post.voted, this.props.session)} <Link to={`/item/${this.props.post.id}`} onMouseEnter={toggleComment} onMouseLeave={toggleComment} style={commentsStyle}>{displayComments(this.props.post.comments)}</Link>
 						</h6>
 				</div>
 			</div>

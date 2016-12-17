@@ -30,12 +30,12 @@ class Discuss extends Component {
 		return (
 			<div>
 				<div style={{marginLeft: 70, marginRight: 70, backgroundColor:'#F7F7F7'}}>
-					<Navbar selected={'NONE'} />
-					<Post post={this.props.post} type={'DISCUSS'} />
+					<Navbar selected={'NONE'} session={this.props.session} />
+					<Post post={this.props.post} type={'DISCUSS'} session={this.props.session} />
 					<div style={{marginLeft: 30}}>
 						<AddComment comment={comment} />
 					</div>
-					<Comments comments={this.props.comments}/>
+					<Comments comments={this.props.comments} />
 					<Footer />
 				</div>
 			</div>
@@ -74,7 +74,8 @@ const organizeCommentsAsTree = (comments) => {
 const mapStateToProps = (state, ownProps) => {
 	return {
 		post: filterPost(state.posts, ownProps.params.itemId),
-		comments: organizeCommentsAsTree(state.comments)
+		comments: organizeCommentsAsTree(state.comments),
+		session: state.session
 	};
 }
 

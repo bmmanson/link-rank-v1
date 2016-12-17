@@ -8,7 +8,6 @@ var router = express.Router();
 router.use('/comment', require('./comment.js'));
 
 router.get('/main', function (req, res, next) {
-	console.log('main, req.user', req.user);
 	Post.findAll({
 		include:[
 			{
@@ -57,7 +56,6 @@ router.get('/main', function (req, res, next) {
 });
 
 router.get('/newest', function (req, res, next) {
-	console.log('newest, req.user', req.user);
 	Post.findAll({
 		include:[
 			{

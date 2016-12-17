@@ -26,7 +26,7 @@ class Root extends Component {
 			<div>
 				<div style={{marginLeft: 70, marginRight: 70, backgroundColor:'#F7F7F7'}}>
 					<Navbar session={this.props.session} />
-					<Posts posts={this.props.posts} type={'MAIN'} />
+					<Posts posts={this.props.posts} type={'MAIN'} session={this.props.session} />
 					{displayMoreButton(this.props.moreLinks)}
 					<Footer />
 				</div>

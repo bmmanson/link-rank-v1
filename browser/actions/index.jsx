@@ -17,6 +17,7 @@ import {selectSubmit} from './session/select-submit.jsx';
 
 import {login} from './session/login.jsx';
 import {logout} from './session/logout.jsx';
+import {initOff} from './session/init.jsx';
 
 export {
 	addPost,
@@ -33,5 +34,6 @@ export {
 	resetPage,
 	selectSubmit,
 	login,
-	logout
+	logout,
+	initOff
 };

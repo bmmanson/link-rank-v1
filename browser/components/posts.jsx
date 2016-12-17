@@ -6,11 +6,11 @@ class Posts extends Component {
 
 	render () {
 
-		const displayLinks = function (posts, type) {
+		const displayLinks = function (posts, type, session) {
 			if (posts) {
 				return (
 					posts.map((post, i) =>
-						(<Post post={post} key={i} num={i + 1} type={type} />)
+						(<Post post={post} key={i} num={i + 1} type={type} session={session} />)
 					)
 				);
 			}
@@ -18,7 +18,7 @@ class Posts extends Component {
 
 		return (
 			<div style={{backgroundColor:'#F7F7F7', marginTop: 0}}>
-				{displayLinks(this.props.posts, this.props.type)}
+				{displayLinks(this.props.posts, this.props.type, this.props.session)}
 			</div>
 		);
 	}
