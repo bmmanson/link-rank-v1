@@ -19,8 +19,17 @@ const httpRequest = (type) => {
 		route = 'newest';
 		store.dispatch(selectNewest());
 	}
+
+	const request = {
+		headers: {
+			'Content-Type': 'application/json'
+  		},
+		credentials: 'same-origin',
+		method: 'GET'
+	}
+
 	const url = rootUrl + `api/post/${route}/`;
-	return fetch(url, {method: 'GET'});
+	return fetch(url, request);
 }
 
 export const getPosts = (type) => {

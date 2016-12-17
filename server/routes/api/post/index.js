@@ -9,8 +9,6 @@ router.use('/comment', require('./comment.js'));
 
 router.get('/main', function (req, res, next) {
 	console.log('main, req.user', req.user);
-	console.log('main, req.session', req.session);
-	console.log('cookie, req.cookie', req.cookie);
 	Post.findAll({
 		include:[
 			{
@@ -25,7 +23,7 @@ router.get('/main', function (req, res, next) {
 	})
 	.then(function (posts) {
 		var promisesForPostsWithUserVoted = [];
-
+		//if user is not logged in, no need to do this
 		posts.forEach(function (post) {
 			promisesForPostsWithUserVoted.push(
 				PostPoint.findOne({
@@ -59,6 +57,7 @@ router.get('/main', function (req, res, next) {
 });
 
 router.get('/newest', function (req, res, next) {
+	console.log('newest, req.user', req.user);
 	Post.findAll({
 		include:[
 			{

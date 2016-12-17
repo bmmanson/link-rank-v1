@@ -2,7 +2,9 @@ const model = {
 	session: {
 		page: 1,
 		selected: 'MAIN',
-		loggedIn: false
+		loggedIn: false,
+		name: null,
+		score: 0
 	}
 };
 

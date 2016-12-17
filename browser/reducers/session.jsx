@@ -22,11 +22,15 @@ export const session = (state = [], action) => {
       });
     case 'LOGIN':
       return Object.assign({}, state, {
-        loggedIn: true
+        loggedIn: true,
+        name: action.name,
+        score: action.score
       });
     case 'LOGOUT':
       return Object.assign({}, state, {
-        loggedIn: false
+        loggedIn: false,
+        name: null,
+        score: 0
       });
     default:
       return state;

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 
 import { Navbar } from './navbar.jsx';
 import { FacebookLoginButton } from './facebook-login-button.jsx';
@@ -13,6 +14,7 @@ class LoginForms extends Component {
 		this.state = {
 			username: '',
 			password: '',
+			passwordDisplay: '',
 			newUsername: '',
 			newPassword: ''
 		};
@@ -22,7 +24,8 @@ class LoginForms extends Component {
 
 		const userLogin = () => {
 			console.log('username:', this.state.username, 'password:', this.state.password);
-			loginServer(this.state.username, this.state.password);
+			loginServer(this.state.username, this.state.password)
+			.then((data) => browserHistory.push('/'));
 		}
 
 		return (

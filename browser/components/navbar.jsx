@@ -5,7 +5,7 @@ import { store } from './../store.jsx';
 
 import { selectSubmit } from './../actions/index.jsx';
 
-import { getPosts } from './../async/index.jsx';
+import { getPosts, logoutServer } from './../async/index.jsx';
 
 import {NavbarStyles} from './../styles/navbar.jsx';
 
@@ -44,11 +44,15 @@ class Navbar extends Component {
 			store.dispatch(selectSubmit());
 		}
 
+		const logout = () => {
+			logoutServer();
+		}
+
 		const displayLogin = (loggedIn) => {
 			if (loggedIn) {
 				return (
 					<h5 style={NavbarStyles.rightText}>
-							Logout
+							{this.props.session.name} (0) | <Link to={'/'} onClick={logout}>Logout</Link>
 					</h5>
 				);
 			} else {

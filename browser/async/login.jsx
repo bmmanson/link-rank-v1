@@ -1,10 +1,14 @@
 import { rootUrl } from './index.jsx';
 
+import { login } from './../actions/index.jsx';
+import { store } from './../store.jsx';
+
 const httpRequest = (name, password) => {
 	const request = {
 		headers: {
 			'Content-Type': 'application/json'
   		},
+  		credentials: 'same-origin',
   		method: "POST",
   		body: JSON.stringify({name, password})
     };
@@ -13,13 +17,10 @@ const httpRequest = (name, password) => {
 }
 
 export const loginServer = (name, password) => {
-	console.log('login server called');
 	return httpRequest(name, password)
+	.then((data) => data.json())
 	.then((data) => {
-		console.log('data', data);
-		return data.json();
-	})
-	.then((login) => {
-		console.log('in async function, loginServer', login);
+		store.dispatch(login(data.user.name, data.user.score));
+		console.log('in async function, loginServer', data);
 	})
 };
