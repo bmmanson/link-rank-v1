@@ -28102,6 +28102,13 @@
 		}
 
 		_createClass(Navbar, [{
+			key: 'componentWillMount',
+			value: function componentWillMount() {
+				if (this.props.session.init) {
+					(0, _index2.getLoggedIn)();
+				}
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 				var _this2 = this;
@@ -28124,10 +28131,6 @@
 						fontWeight: '700',
 						textDecoration: 'underline'
 					});
-				}
-
-				if (this.props.session.init) {
-					(0, _index2.getLoggedIn)();
 				}
 
 				var updatePostsMain = function updatePostsMain() {

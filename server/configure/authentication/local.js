@@ -7,15 +7,13 @@ module.exports = function (app, db) {
     var User = db.model('user');
 
     var strategyFn = function (name, password, done) {
-        console.log('name:', name, 'password', password);
         User.findOne({
                 where: {
                     name: name
                 }
             })
             .then(function (user) {
-                // removed some code. add: || !user.correctPassword(password)
-                if (!user) {
+                if (!user || !user.correctPassword(password)) {
                     done(null, false);
                 } else {
                     done(null, user);
@@ -43,8 +41,7 @@ module.exports = function (app, db) {
                 if (loginErr) return next(loginErr);
 
                 res.status(200).send({
-                    //removed some code. add: user.sanitize()
-                    user: user
+                    user: user.sanitize()
                 });
             });
         };

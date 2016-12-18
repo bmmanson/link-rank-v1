@@ -10,6 +10,13 @@ import { getPosts, logoutServer, getLoggedIn } from './../async/index.jsx';
 import {NavbarStyles} from './../styles/navbar.jsx';
 
 class Navbar extends Component {
+
+	componentWillMount () {
+		if (this.props.session.init) {
+			getLoggedIn();
+		}
+	}
+
 	render () {
 
 		let mainStyle = {color: 'white', textDecoration: 'none'};
@@ -30,10 +37,6 @@ class Navbar extends Component {
 				fontWeight: '700',
 				textDecoration: 'underline',
 			});
-		}
-
-		if (this.props.session.init) {
-			getLoggedIn();
 		}
 
 		const updatePostsMain = () => {

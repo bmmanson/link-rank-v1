@@ -38,8 +38,7 @@ module.exports = function(app, db) {
 
 	app.get('/auth/session', function (req, res) {
         if (req.user) {
-        	//removed req.user.sanitize()
-            res.send({ user: req.user });
+            res.send({ user: req.user.sanitize() });
         } else {
             res.status(401).send('No authenticated user.');
         }

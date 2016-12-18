@@ -2,23 +2,6 @@ var Promise = require('bluebird');
 var db = require('./models');
 
 var data = {
-	user: [
-		{
-			name: 'benny',
-			facebookId: 'a',
-			password: 'abc'
-		},
-		{
-			name: 'bex',
-			facebookId: 'b',
-			password: 'abc'
-		},
-		{
-			name: 'gus',
-			facebookId: 'c',
-			password: 'abc'
-		}
-	],
 	post: [
 		{
 			title: "The New York Times",
@@ -290,10 +273,11 @@ var data = {
 	]
 }
 
-db.sync({force: true})
+db.sync({force: false})
 .then(function () {
   console.log("Dropped old data, now inserting data");
   return Promise.map(Object.keys(data), function (name) {
+  	for (var i = 0; i < 10000; i++) {};
     return Promise.map(data[name], function (item) {
       return db.model(name)
       .create(item);
